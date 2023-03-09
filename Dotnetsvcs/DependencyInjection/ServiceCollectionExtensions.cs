@@ -7,8 +7,7 @@ using System.Reflection;
 
 namespace Dotnetsvcs.DependencyInjection;
 
-public static class ServiceCollectionExtensions
-{
+public static class ServiceCollectionExtensions {
     public static IServiceCollection AddDotnetsvc<T>(this IServiceCollection serviceCollection, Assembly assemblySvcs)
         where T : DbContext
         =>
@@ -21,6 +20,7 @@ public static class ServiceCollectionExtensions
         .AddDotnetsvcSvc()
 
         // app services implementations (in app assembly)
+        .AddProjections(assemblySvcs)
         .AddPreconditions(assemblySvcs)
         .AddPostConditions(assemblySvcs)
         .AddCreate(assemblySvcs)

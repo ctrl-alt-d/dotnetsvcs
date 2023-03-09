@@ -1,10 +1,9 @@
-using Dotnetsvcs.DbCtx.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.BlogParm.Create;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.MSDbContext;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Projections.Abstractions.BlogProjections;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.TestUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +15,7 @@ public class ServiceCanCreateBlogsSimpleTest {
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreateBlogsSimpleTest()
-    {
+    public ServiceCanCreateBlogsSimpleTest() {
         // Arrange (Environment)
         Logger =
             new FakeLogger();
@@ -38,16 +36,14 @@ public class ServiceCanCreateBlogsSimpleTest {
     }
 
     [Fact]
-    public async Task CreatingBlogsTest()
-    {
+    public async Task CreatingBlogsTest() {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
             .GetRequiredService<ICreateBlogService>();
 
         var parm1 =
-            new CreateBlogParms()
-            {
+            new CreateBlogParms() {
                 Rating = 10,
                 Titol = "hola",
             };
@@ -58,8 +54,7 @@ public class ServiceCanCreateBlogsSimpleTest {
         };
 
         var parm2 =
-            new CreateBlogParms()
-            {
+            new CreateBlogParms() {
                 Rating = 20,
                 Titol = "adeu",
             };
@@ -69,13 +64,17 @@ public class ServiceCanCreateBlogsSimpleTest {
             Titol = "adeu",
         };
 
+        var projection =
+            ServiceProvider
+            .GetRequiredService<IBlogDefaultProjection>();
+
         // Act
 
         var blog1 =
-            await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult);
+            await createBlogSvc.Do(parm1, projection);
 
         var blog2 =
-            await createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult);
+            await createBlogSvc.Do(parm2, projection);
 
         createBlogSvc.Dispose();
 

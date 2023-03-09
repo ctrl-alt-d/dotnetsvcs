@@ -5,8 +5,12 @@ using System.Reflection;
 
 namespace Dotnetsvcs.DependencyInjectionHelpers;
 
-internal static class SvcServiceCollectionExtensions
-{
+internal static class SvcServiceCollectionExtensions {
+    internal static IServiceCollection AddProjections(this IServiceCollection serviceCollection, Assembly assembly)
+        =>
+        serviceCollection
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(IProjection<,>));
+
     internal static IServiceCollection AddPreconditions(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
@@ -37,8 +41,7 @@ internal static class SvcServiceCollectionExtensions
         serviceCollection
         .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(DbOpRetrieve<,,>));
 
-    private static IServiceCollection AddWithInterfaceIfImplementsGenericInterface(this IServiceCollection serviceCollection, Assembly assembly, Type target)
-    {
+    private static IServiceCollection AddWithInterfaceIfImplementsGenericInterface(this IServiceCollection serviceCollection, Assembly assembly, Type target) {
         var items =
             assembly
             .TypesWithGenericTypeDefinition(target);

@@ -1,9 +1,9 @@
-using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.BlogParm.Create;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.MSDbContext;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Projections.Abstractions.BlogProjections;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.TestUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,8 +15,7 @@ public class ServiceCanCreateBlogWithPosts {
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreateBlogWithPosts()
-    {
+    public ServiceCanCreateBlogWithPosts() {
         // Arrange (Environment)
         Logger =
             new FakeLogger();
@@ -37,8 +36,7 @@ public class ServiceCanCreateBlogWithPosts {
     }
 
     [Fact]
-    public async Task CreatingBlogWithPostTest()
-    {
+    public async Task CreatingBlogWithPostTest() {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
@@ -57,9 +55,13 @@ public class ServiceCanCreateBlogWithPosts {
             NumPostsCalculated = 69,
         };
 
+        var projection =
+            ServiceProvider
+            .GetRequiredService<IBlogDefaultProjection>();
+
         // Act
         var blogDto =
-            await createBlogSvc.Do(parm, BlogDefaultProjection.ToDtoResult);
+            await createBlogSvc.Do(parm, projection);
 
         // Assert
         Ctx

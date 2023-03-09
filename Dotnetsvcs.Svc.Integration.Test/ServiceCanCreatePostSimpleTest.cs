@@ -1,8 +1,9 @@
-using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.PostParm.Create;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.PostSvcs.Create.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.PostSvcs.Create.Artifacts;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.MSDbContext;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Projections.Abstractions.PostProjections;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.PostSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.TestUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,7 @@ public class ServiceCanCreatePostSimpleTest {
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreatePostSimpleTest()
-    {
+    public ServiceCanCreatePostSimpleTest() {
         // Arrange (Environment)
         Logger =
             new FakeLogger();
@@ -36,10 +36,9 @@ public class ServiceCanCreatePostSimpleTest {
     }
 
     [Fact]
-    public async Task CreatingPostTest()
-    {
+    public async Task CreatingPostTest() {
         // Arrange
-        var blog = new Blog() {Rating =10, Titol="Blog test title" };
+        var blog = new Blog() { Rating =10, Titol="Blog test title" };
         Ctx.Add(blog);
         Ctx.SaveChanges();
 
@@ -65,9 +64,13 @@ public class ServiceCanCreatePostSimpleTest {
                 Blog = blog
             };
 
+        var projection =
+            ServiceProvider
+            .GetRequiredService<IPostDefaultProjection>();
+
         // Act
         var postDto =
-            await createPostSvc.Do(parm, PostDefaultProjection.ToDtoResult);
+            await createPostSvc.Do(parm, projection);
 
         // Assert
         Ctx

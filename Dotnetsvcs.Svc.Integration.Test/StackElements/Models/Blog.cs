@@ -1,7 +1,6 @@
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
 
-public class Blog
-{
+public class Blog {
     public int Id { get; set; }
     public virtual string Titol { get; set; } = default!;
 

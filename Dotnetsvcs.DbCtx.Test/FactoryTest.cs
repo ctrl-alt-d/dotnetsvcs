@@ -6,14 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.DbCtx.Test;
 
-public class FactoryTest
-{
-    public class MyDbContext : DbContext
-    { }
+public class FactoryTest {
+    public class MyDbContext : DbContext { }
 
     [Fact]
-    public void FactoryCanCreateWrappedContext()
-    {
+    public void FactoryCanCreateWrappedContext() {
         // Arrange
         var factory =
             new ServiceCollection()

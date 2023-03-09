@@ -2,11 +2,9 @@
 
 namespace Dotnetsvcs.Svc.Integration.Test.TestUtils;
 
-public class FakeLogger
-{
+public class FakeLogger {
 
-    public void SaveLog(string log)
-    {
+    public void SaveLog(string log) {
         var lineat =
             log
             .Split(Environment.NewLine)
@@ -24,8 +22,7 @@ public class FakeLogger
         LogLastEntry = sani3;
     }
 
-    internal void Clear()
-    {
+    internal void Clear() {
         Log.Clear();
     }
 

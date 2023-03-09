@@ -4,8 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.DbCtx.DependencyInjection;
 
-public static class ServiceCollectionExtensions
-{
+public static class ServiceCollectionExtensions {
     public static IServiceCollection AddDotnetsvcDbCtx<T>(this IServiceCollection serviceCollection)
         where T : DbContext
         =>

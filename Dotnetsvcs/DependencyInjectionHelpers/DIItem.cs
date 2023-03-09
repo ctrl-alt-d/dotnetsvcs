@@ -1,9 +1,7 @@
 ﻿namespace Dotnetsvcs.DependencyInjectionHelpers;
 
-internal class DIItem
-{
-    public DIItem(Type interfaceType, Type implementationType)
-    {
+internal class DIItem {
+    public DIItem(Type interfaceType, Type implementationType) {
         InterfaceType=interfaceType;
         ImplementationType=implementationType;
     }

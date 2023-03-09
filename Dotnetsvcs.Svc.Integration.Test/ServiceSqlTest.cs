@@ -1,9 +1,8 @@
-using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.BlogParm.Create;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.MSDbContext;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Projections.Abstractions.BlogProjections;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.TestUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,8 +14,7 @@ public class ServiceSqlTest {
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceSqlTest()
-    {
+    public ServiceSqlTest() {
         // Arrange (Environment)
         Logger =
             new FakeLogger();
@@ -37,19 +35,21 @@ public class ServiceSqlTest {
     }
 
     [Fact]
-    public async Task ExpectedSqlGenerationTest()
-    {
+    public async Task ExpectedSqlGenerationTest() {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
             .GetRequiredService<ICreateBlogService>();
 
         var parm =
-            new CreateBlogParms()
-            {
+            new CreateBlogParms() {
                 Rating = 10,
                 Titol = "hola",
             };
+
+        var projection =
+            ServiceProvider
+            .GetRequiredService<IBlogDefaultProjection>();
 
         var expectedPrecondition =
             "SELECT EXISTS ( SELECT 1 FROM Blog AS b WHERE b.Titol = @__parms_Titol_0)";
@@ -68,7 +68,7 @@ public class ServiceSqlTest {
 
         // Act
         var blogDto =
-            await createBlogSvc.Do(parm, BlogDefaultProjection.ToDtoResult);
+            await createBlogSvc.Do(parm, projection);
 
         var logs = Logger.Log;
 

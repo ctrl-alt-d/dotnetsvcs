@@ -1,25 +1,23 @@
 using Dotnetsvcs.DbCtx.Abstractions;
 using Dotnetsvcs.Svc.Exceptions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.BlogParm.Create;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.MSDbContext;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Projections.Abstractions.BlogProjections;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.TestUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc.Integration.Test;
 
-public class PreConditionSimpleTest
-{
+public class PreConditionSimpleTest {
     private readonly FakeLogger Logger;
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public PreConditionSimpleTest()
-    {
+    public PreConditionSimpleTest() {
         // Arrange (Environment)
         Logger =
             new FakeLogger();
@@ -40,8 +38,7 @@ public class PreConditionSimpleTest
     }
 
     [Fact]
-    public async Task FactoryCanCreateWrappedContext()
-    {
+    public async Task FactoryCanCreateWrappedContext() {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
@@ -53,29 +50,31 @@ public class PreConditionSimpleTest
             .CreateCtx();
 
         var parm1 =
-            new CreateBlogParms()
-            {
+            new CreateBlogParms() {
                 Rating = 10,
                 Titol = "hola",
             };
 
         var parm2 =
-            new CreateBlogParms()
-            {
+            new CreateBlogParms() {
                 Rating = 20,
                 Titol = parm1.Titol,
             };
 
-        using var tx = 
+        var projection =
+            ServiceProvider
+            .GetRequiredService<IBlogDefaultProjection>();
+
+        using var tx =
             dbCtxWrapper.BeginTransaction();
 
         var blog1 =
-            await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
+            await createBlogSvc.Do(parm1, projection, dbCtxWrapper);
 
         // Act && Assert
         await createBlogSvc
             .Awaiting(
-               c => createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult, dbCtxWrapper)
+               c => createBlogSvc.Do(parm2, projection, dbCtxWrapper)
             )
             .Should()
             .ThrowAsync<SvcException>()
