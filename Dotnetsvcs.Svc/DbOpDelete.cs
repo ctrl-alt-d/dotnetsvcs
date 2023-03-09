@@ -9,9 +9,12 @@ namespace Dotnetsvcs.Svc;
 public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelete<T, TParms> where T : class
     where TParms : DtoParmUpdate
 {
-    protected DbOpDelete(IDbCtxWrapperFactory dbCtxWrapperFactory, IPreConditions<TParms> preConditions, IPostConditions<T, TParms> postConditions) :
-        base(dbCtxWrapperFactory, preConditions, postConditions)
-    {
+    protected DbOpDelete(
+        IDbCtxWrapperFactory dbCtxWrapperFactory,
+        IPreCondition<TParms> preCondition,
+        IPostCondition<T, TParms> postCondition
+        ) :
+        base(dbCtxWrapperFactory, preCondition, postCondition) {
     }
 
     public override async Task<TDtoResult> Do<TDtoResult>(
@@ -26,20 +29,20 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
 
         await PreActions(parms, cancellationToken);
 
-        var entity = await DbCtxWrapper.FindOrException<T>(parms.keyValues, cancellationToken: cancellationToken);
+        var entity = await DbCtxWrapper.FindOrException<T>(parms.keyValues);
 
         var result =
+            await
             DbCtxWrapper
-            .Set<T>()
-            .Where(x => x == entity)
-            .Select(projection)
-            .First();
+            .FirstWithProjectionAsync(
+                projection: projection,
+                where: x => x == entity);
 
         DbCtxWrapper.Remove(entity);
 
         if (SaveChangesFlag) await DbCtxWrapper.SaveChangesAsync(cancellationToken);
 
-        await PostActions(entity, cancellationToken);
+        await PostActions(parms, entity, cancellationToken);
 
         await CheckPostConditions(entity, parms, cancellationToken);
 

@@ -100,5 +100,13 @@ public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
         DbContext
         .Dispose();
 
-
+    public Task<TProjection> FirstWithProjectionAsync<T, TProjection>(Expression<Func<T, TProjection>> projection, Expression<Func<T, bool>> where)
+        where T : class
+        where TProjection : class 
+        =>
+        DbContext
+        .Set<T>()
+        .Where(where)
+        .Select(projection)
+        .FirstAsync();
 }

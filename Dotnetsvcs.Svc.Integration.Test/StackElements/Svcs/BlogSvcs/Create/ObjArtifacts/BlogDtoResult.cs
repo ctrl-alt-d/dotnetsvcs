@@ -1,6 +1,6 @@
 ﻿using Dotnetsvcs.Svc.DtoResult;
 
-namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs;
+namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
 
 public class BlogDtoResult : IDtoResult
 {
@@ -10,4 +10,5 @@ public class BlogDtoResult : IDtoResult
     public string CategoriaDisplay { get; init; } = default!;
     public string Titol { get; init; } = default!;
     public int Rating { get; init; }
+    public int NumPostsCalculated { get; init; }
 }

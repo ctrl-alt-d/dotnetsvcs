@@ -12,6 +12,6 @@ namespace Dotnetsvcs.Svc.Abstractions.BaseOps
             TParms parms, 
             Expression<Func<T, TDtoResult>> projection,
             IDbCtxWrapper? ctx = null,
-            CancellationToken cancellationToken = default) where TDtoResult : IDtoResult;
+            CancellationToken cancellationToken = default) where TDtoResult : class, IDtoResult;
     }
 }

@@ -1,4 +1,3 @@
-using Dotnetsvcs.DbCtx.Abstractions;
 using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
@@ -11,13 +10,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc.Integration.Test;
 
-public class ServiceCanCreateBlogsWithTxSimpleTest
-{
+public class ServiceCanCreateBlogSimpleTest {
     private readonly FakeLogger Logger;
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreateBlogsWithTxSimpleTest()
+    public ServiceCanCreateBlogSimpleTest()
     {
         // Arrange (Environment)
         Logger =
@@ -39,83 +37,53 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
     }
 
     [Fact]
-    public async Task CreatingBlogsWithTxTest()
+    public async Task CreatingBlogTest()
     {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
             .GetRequiredService<ICreateBlogService>();
 
-        using var dbCtxWrapper =
-            ServiceProvider
-            .GetRequiredService<IDbCtxWrapperFactory>()
-            .CreateCtx();
-
-        var parm1 =
-            new CreateBlogParms() {
+        var parm =
+            new CreateBlogParms()
+            {
                 Rating = 10,
                 Titol = "hola",
             };
 
-        var expected1 = new {
+        var expectedEntity = new {
             Rating = 10,
             Titol = "hola",
         };
 
-        var parm2 =
-            new CreateBlogParms() {
-                Rating = 20,
-                Titol = "adeu",
-            };
-
-        var expected2 = new {
-            Rating = 20,
-            Titol = "adeu",
+        var expectedDto = new {
+            Rating = 10,
+            Titol = "hola",
+            NumPostsCalculated = 0,
         };
 
         // Act
-        using var tx = 
-            dbCtxWrapper.BeginTransaction();
-
-        var blog1 =
-            await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
-
-        var blog2 =
-            await createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
-
-        tx.Commit();
-        tx.Dispose();
-        dbCtxWrapper.Dispose();
-        createBlogSvc.Dispose();
+        var blogDto =
+            await createBlogSvc.Do(parm, BlogDefaultProjection.ToDtoResult);
 
         // Assert
         Ctx
             .Set<Blog>()
             .Should()
-            .HaveCount(2);
-
-
-        Ctx
-            .Set<Blog>()
-            .Should()
-            .ContainEquivalentOf(expected1);
+            .HaveCount(1);
 
         Ctx
             .Set<Blog>()
             .Should()
-            .ContainEquivalentOf(expected2);
+            .ContainEquivalentOf(expectedEntity);
 
-        blog1
+        blogDto
             .Should()
-            .BeEquivalentTo(expected1);
+            .BeEquivalentTo(expectedDto);
 
-        blog2
-            .Should()
-            .BeEquivalentTo(expected2);
-
-        blog1
+        blogDto
             .TimeStamp
             .Should()
-            .NotBeSameAs(blog2.TimeStamp);
+            .NotBeSameAs(default);
     }
 }

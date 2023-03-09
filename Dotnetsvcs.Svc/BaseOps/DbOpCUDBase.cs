@@ -9,37 +9,31 @@ namespace Dotnetsvcs.Svc.BaseOps;
 public abstract class DbOpCUDBase<T, TParms> : DbOpBase, IDbOpCUDBase<T, TParms> where TParms : IDtoParm
     where T : class
 {
-    protected virtual IPreConditions<TParms> PreConditions { get; }
-    protected virtual IPostConditions<T, TParms> PostConditions { get; }
+    protected virtual IPreCondition<TParms> PreCondition { get; }
+    protected virtual IPostCondition<T, TParms> PostCondition { get; }
 
     protected DbOpCUDBase(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
-        IPreConditions<TParms> preConditions,
-        IPostConditions<T, TParms> postConditions
+        IPreCondition<TParms> preCondition,
+        IPostCondition<T, TParms> postCondition
         ) : base(dbCtxWrapperFactory)
     {
-        PreConditions = preConditions;
-        PostConditions = postConditions;
+        PreCondition = preCondition;
+        PostCondition = postCondition;
     }
 
     protected async Task CheckPreconditions(TParms parms, CancellationToken cancellationToken = default)
     {
-        foreach (var preCondition in PreConditions)
-        {
-            await preCondition.Check(parms, DbCtxWrapper, cancellationToken);
-        }
+        await PreCondition.Check(parms, DbCtxWrapper, cancellationToken);
     }
 
     protected abstract Task PreActions(TParms parms, CancellationToken cancellationToken = default);
 
-    protected abstract Task PostActions(T entity, CancellationToken cancellationToken = default);
+    protected abstract Task PostActions(TParms parms, T entity, CancellationToken cancellationToken = default);
 
     protected async Task CheckPostConditions(T entity, TParms parms, CancellationToken cancellationToken = default)
     {
-        foreach (var postCondition in PostConditions)
-        {
-            await postCondition.Check(entity, parms, DbCtxWrapper, cancellationToken);
-        }
+        await PostCondition.Check(entity, parms, DbCtxWrapper, cancellationToken);
     }
 
     public abstract Task<TDtoResult> Do<TDtoResult>(
@@ -47,7 +41,7 @@ public abstract class DbOpCUDBase<T, TParms> : DbOpBase, IDbOpCUDBase<T, TParms>
         Expression<Func<T, TDtoResult>> projection,
         IDbCtxWrapper? ctx = null,
         CancellationToken cancellationToken = default)
-        where TDtoResult : IDtoResult;
+        where TDtoResult : class, IDtoResult;
 
     protected bool SaveChangesFlag { get; set; } = true;
 }

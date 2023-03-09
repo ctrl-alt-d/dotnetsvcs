@@ -1,4 +1,5 @@
 using Dotnetsvcs.DbCtx.Abstractions;
+using Dotnetsvcs.Svc.Exceptions;
 using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
@@ -11,13 +12,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc.Integration.Test;
 
-public class ServiceCanCreateBlogsWithTxSimpleTest
+public class PreConditionSimpleTest
 {
     private readonly FakeLogger Logger;
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreateBlogsWithTxSimpleTest()
+    public PreConditionSimpleTest()
     {
         // Arrange (Environment)
         Logger =
@@ -39,7 +40,7 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
     }
 
     [Fact]
-    public async Task CreatingBlogsWithTxTest()
+    public async Task FactoryCanCreateWrappedContext()
     {
         // Arrange
         using var createBlogSvc =
@@ -52,70 +53,40 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
             .CreateCtx();
 
         var parm1 =
-            new CreateBlogParms() {
+            new CreateBlogParms()
+            {
                 Rating = 10,
                 Titol = "hola",
             };
 
-        var expected1 = new {
-            Rating = 10,
-            Titol = "hola",
-        };
-
         var parm2 =
-            new CreateBlogParms() {
+            new CreateBlogParms()
+            {
                 Rating = 20,
-                Titol = "adeu",
+                Titol = parm1.Titol,
             };
 
-        var expected2 = new {
-            Rating = 20,
-            Titol = "adeu",
-        };
-
-        // Act
         using var tx = 
             dbCtxWrapper.BeginTransaction();
 
         var blog1 =
             await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
 
-        var blog2 =
-            await createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
-
-        tx.Commit();
-        tx.Dispose();
-        dbCtxWrapper.Dispose();
-        createBlogSvc.Dispose();
-
-        // Assert
-        Ctx
-            .Set<Blog>()
+        // Act && Assert
+        await createBlogSvc
+            .Awaiting(
+               c => createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult, dbCtxWrapper)
+            )
             .Should()
-            .HaveCount(2);
+            .ThrowAsync<SvcException>()
+            .WithMessage($"Already exists Blog with title: {parm2.Titol}");
 
+        tx.Rollback();
 
         Ctx
             .Set<Blog>()
             .Should()
-            .ContainEquivalentOf(expected1);
+            .HaveCount(0);
 
-        Ctx
-            .Set<Blog>()
-            .Should()
-            .ContainEquivalentOf(expected2);
-
-        blog1
-            .Should()
-            .BeEquivalentTo(expected1);
-
-        blog2
-            .Should()
-            .BeEquivalentTo(expected2);
-
-        blog1
-            .TimeStamp
-            .Should()
-            .NotBeSameAs(blog2.TimeStamp);
     }
 }
