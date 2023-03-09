@@ -12,8 +12,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dotnetsvcs.DbCtx.Abstractions\Dotnetsvcs.DbCtx.Abstractions.csproj" />
-    <ProjectReference Include="..\Dotnetsvcs.Svc.DtoResult\Dotnetsvcs.Svc.DtoResult.csproj" />
-    <ProjectReference Include="..\Dotnetsvcs.Svc.DtoParm\Dotnetsvcs.Svc.DtoParm.csproj" />
+    <ProjectReference Include="..\Dotnetsvcs.DtoResult\Dotnetsvcs.DtoResult.csproj" />
+    <ProjectReference Include="..\Dotnetsvcs.DtoParm\Dotnetsvcs.DtoParm.csproj" />
+    <ProjectReference Include="..\Dotnetsvcs.Svc.Abstractions\Dotnetsvcs.Svc.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.ModelConfiguration;
 
 public class BlogConfiguration
-       : IEntityTypeConfiguration<Blog>
-{
-    public void Configure(EntityTypeBuilder<Blog> mConfiguration)
-    {
+       : IEntityTypeConfiguration<Blog> {
+    public void Configure(EntityTypeBuilder<Blog> mConfiguration) {
 
         //
         // Sqlite workaround.

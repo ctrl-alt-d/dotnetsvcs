@@ -6,14 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.DbCtx.Test;
 
-public class GetFullDbContextTest
-{
-    public class MyDbContext : DbContext
-    { }
+public class GetFullDbContextTest {
+    public class MyDbContext : DbContext { }
 
     [Fact]
-    public void FullContextGetter()
-    {
+    public void FullContextGetter() {
         // Arrange
         using var ctx =
             new ServiceCollection()
@@ -34,8 +31,7 @@ public class GetFullDbContextTest
     }
 
     [Fact]
-    public void FullContextGetter_ThrowsExecptionIfBadContextRequested()
-    {
+    public void FullContextGetter_ThrowsExecptionIfBadContextRequested() {
         // Arrange
         using var ctx =
             new ServiceCollection()

@@ -7,8 +7,7 @@ namespace Dotnetsvcs.DbCtx.Abstractions;
 /// The goal of this interface is to easaly mock db operations in your code.
 /// Try to code your logic without full DbContext, just with wrappers.
 /// </summary>
-public interface IDbCtxWrapper : IDisposable
-{
+public interface IDbCtxWrapper : IDisposable {
     ITxWrapper BeginTransaction();
 
     Task AddAsync<T>(T entity, CancellationToken cancellationToken = default)
@@ -25,7 +24,7 @@ public interface IDbCtxWrapper : IDisposable
         Expression<Func<T, bool>> where
         )
         where T : class
-        where TProjection: class;
+        where TProjection : class;
 
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

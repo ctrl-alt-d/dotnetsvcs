@@ -4,17 +4,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Dotnetsvcs.DbCtx;
 
 public class DbCtxWrapperFactory<T> : IDbCtxWrapperFactory
-    where T : DbContext
-{
+    where T : DbContext {
     private readonly IDbContextFactory<T> DbContextFactory;
 
-    public DbCtxWrapperFactory(IDbContextFactory<T> dbContextFactory)
-    {
+    public DbCtxWrapperFactory(IDbContextFactory<T> dbContextFactory) {
         DbContextFactory=dbContextFactory;
     }
 
-    public IDbCtxWrapper CreateCtx()
-    {
+    public IDbCtxWrapper CreateCtx() {
         var dbCtx =
             DbContextFactory
             .CreateDbContext();

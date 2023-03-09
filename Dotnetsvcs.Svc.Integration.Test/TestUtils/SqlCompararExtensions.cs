@@ -1,8 +1,6 @@
 namespace Dotnetsvcs.Svc.Integration.Test.TestUtils;
-public static class SqlCompararExtensions
-{
-    public static string ComparableSql(this string sql_raw)
-    {
+public static class SqlCompararExtensions {
+    public static string ComparableSql(this string sql_raw) {
         var sql_lines =
             sql_raw
             .Split(Environment.NewLine)

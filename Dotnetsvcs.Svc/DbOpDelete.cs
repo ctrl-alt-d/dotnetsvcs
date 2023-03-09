@@ -1,14 +1,12 @@
-﻿using Dotnetsvcs.Svc.Abstractions;
+﻿using Dotnetsvcs.DtoParm;
+using Dotnetsvcs.Svc.Abstractions;
 using Dotnetsvcs.Svc.BaseOps;
 using Dotnetsvcs.Svc.CtxWrapperHelpers;
-using Dotnetsvcs.Svc.DtoParm;
-using System.Linq.Expressions;
 
 namespace Dotnetsvcs.Svc;
 
 public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelete<T, TParms> where T : class
-    where TParms : DtoParmUpdate
-{
+    where TParms : DtoParmUpdate {
     protected DbOpDelete(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
@@ -19,10 +17,9 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
 
     public override async Task<TDtoResult> Do<TDtoResult>(
         TParms parms,
-        Expression<Func<T, TDtoResult>> projection,
+        IProjection<T, TDtoResult> projection,
         IDbCtxWrapper? ctx = null,
-        CancellationToken cancellationToken = default)
-    {
+        CancellationToken cancellationToken = default) {
         if (ctx != null) this.UseDbCtxWrapper(ctx);
 
         await CheckPreconditions(parms, cancellationToken);
@@ -35,7 +32,7 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
             await
             DbCtxWrapper
             .FirstWithProjectionAsync(
-                projection: projection,
+                projection: projection.GetToDtoResult(DbCtxWrapper),
                 where: x => x == entity);
 
         DbCtxWrapper.Remove(entity);

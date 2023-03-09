@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Dotnetsvcs.DbCtx.Transactions;
 
-public class TxWrapper : ITxWrapper
-{
+public class TxWrapper : ITxWrapper {
     private IDbContextTransaction InnerTx;
 
-    public TxWrapper(IDbContextTransaction innerTx)
-    {
+    public TxWrapper(IDbContextTransaction innerTx) {
         InnerTx = innerTx;
     }
 

@@ -2,11 +2,9 @@
 
 namespace Dotnetsvcs.DependencyInjectionHelpers;
 
-internal static class AssemblyExtensions
-{
-      
-    internal static List<DIItem> TypesWithGenericTypeDefinition(this Assembly assembly, Type target)
-    {
+internal static class AssemblyExtensions {
+
+    internal static List<DIItem> TypesWithGenericTypeDefinition(this Assembly assembly, Type target) {
         var types =
             assembly
             .GetTypes()
@@ -43,8 +41,7 @@ internal static class AssemblyExtensions
             .Select(i => i.implementationType.Name)
             .ToList();
 
-        if (notFoundInteface.Any())
-        {
+        if (notFoundInteface.Any()) {
             var msg = "Unable to locate interface for " +
                 string.Join(", ", notFoundInteface);
             throw new Exception(msg);
@@ -56,8 +53,7 @@ internal static class AssemblyExtensions
             .ToList();
     }
 
-    private static Type? MyInterface(this Type implementationType, List<Type> intefaces)
-    {
+    private static Type? MyInterface(this Type implementationType, List<Type> intefaces) {
         return intefaces.FirstOrDefault(t => t.Name == $"I{implementationType.Name}");
     }
 }

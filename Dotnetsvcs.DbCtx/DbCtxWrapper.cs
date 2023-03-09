@@ -8,12 +8,10 @@ namespace Dotnetsvcs.DbCtx;
 
 
 public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
-    where TDbContext : DbContext
-{
+    where TDbContext : DbContext {
     protected virtual TDbContext DbContext { get; }
 
-    public DbCtxWrapper(TDbContext dbContext)
-    {
+    public DbCtxWrapper(TDbContext dbContext) {
         DbContext=dbContext;
     }
 
@@ -79,11 +77,9 @@ public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
         .LoadAsync();
 
     public TFullDbContext GetDbContext<TFullDbContext>()
-        where TFullDbContext : class
-    {
+        where TFullDbContext : class {
         // Check same type:
-        if (DbContext is not TFullDbContext fullCtx)
-        {
+        if (DbContext is not TFullDbContext fullCtx) {
             var msg =
                 $"Wrong context type. " +
                 $"My dbContext [{typeof(TDbContext).Name}] does not " +
@@ -102,7 +98,7 @@ public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
 
     public Task<TProjection> FirstWithProjectionAsync<T, TProjection>(Expression<Func<T, TProjection>> projection, Expression<Func<T, bool>> where)
         where T : class
-        where TProjection : class 
+        where TProjection : class
         =>
         DbContext
         .Set<T>()

@@ -2,8 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dotnetsvcs.Svc.Integration.Test.TestUtils;
 
-public static class TestCtxPams
-{
+public static class TestCtxPams {
     public static DbContextOptionsBuilder ConfigureDbOptions(
         this DbContextOptionsBuilder options,
         Action<string>? customLogger = null

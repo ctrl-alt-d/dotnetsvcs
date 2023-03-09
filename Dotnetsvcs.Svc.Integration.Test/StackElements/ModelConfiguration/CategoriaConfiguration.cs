@@ -4,10 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.ModelConfiguration;
 public class CategoriaConfiguration
-       : IEntityTypeConfiguration<Categoria>
-{
-    public void Configure(EntityTypeBuilder<Categoria> mConfiguration)
-    {
+       : IEntityTypeConfiguration<Categoria> {
+    public void Configure(EntityTypeBuilder<Categoria> mConfiguration) {
         mConfiguration.HasKey(x => x.Id);
 
         mConfiguration

@@ -1,7 +1,6 @@
-﻿using Dotnetsvcs.Svc.Abstractions;
+﻿using Dotnetsvcs.DtoParm;
+using Dotnetsvcs.Svc.Abstractions;
 using Dotnetsvcs.Svc.BaseOps;
-using Dotnetsvcs.Svc.DtoParm;
-using System.Linq.Expressions;
 
 namespace Dotnetsvcs.Svc;
 
@@ -9,24 +8,21 @@ public abstract class DbOpCreate<T, TParms> :
     DbOpCUDBase<T, TParms>, // Base
     IDbOpCreate<T, TParms>  // Interface
     where T : class
-    where TParms : DtoParmCreate
-{
+    where TParms : DtoParmCreate {
     protected DbOpCreate(
-        IDbCtxWrapperFactory dbCtxWrapperFactory, 
-        IPreCondition<TParms> preCondition, 
+        IDbCtxWrapperFactory dbCtxWrapperFactory,
+        IPreCondition<TParms> preCondition,
         IPostCondition<T, TParms> postCondition
         ) :
-        base(dbCtxWrapperFactory, preCondition, postCondition)
-    {
+        base(dbCtxWrapperFactory, preCondition, postCondition) {
     }
 
     protected abstract Task<T> CreateEntityFromParms(TParms parms, CancellationToken cancellationToken = default);
     public override async Task<TDtoResult> Do<TDtoResult>(
         TParms parms,
-        Expression<Func<T, TDtoResult>> projection,
+        IProjection<T, TDtoResult> projection,
         IDbCtxWrapper? ctx = null,
-        CancellationToken cancellationToken = default)
-    {
+        CancellationToken cancellationToken = default) {
         if (ctx != null) this.UseDbCtxWrapper(ctx);
 
         await CheckPreconditions(parms, cancellationToken);
@@ -47,7 +43,7 @@ public abstract class DbOpCreate<T, TParms> :
             await
             DbCtxWrapper
             .FirstWithProjectionAsync(
-                projection: projection,
+                projection: projection.GetToDtoResult(DbCtxWrapper),
                 where: x => x == entity);
 
         return result;

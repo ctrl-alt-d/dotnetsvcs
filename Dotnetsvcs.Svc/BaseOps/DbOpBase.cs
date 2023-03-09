@@ -3,19 +3,16 @@ using Dotnetsvcs.Svc.Abstractions.HelperInterfaces;
 
 namespace Dotnetsvcs.Svc.BaseOps;
 
-public abstract class DbOpBase : IDisposable, ITransferableDbCtxWrapper, IDbOpBase
-{
+public abstract class DbOpBase : IDisposable, ITransferableDbCtxWrapper, IDbOpBase {
     protected virtual IDbCtxWrapperFactory DbCtxWrapperFactory { get; }
     private IDbCtxWrapper? _myDbCtxWrapper;
     private IDbCtxWrapper? _externalDbCtxWrapper;
 
-    protected DbOpBase(IDbCtxWrapperFactory dbCtxWrapperFactory)
-    {
+    protected DbOpBase(IDbCtxWrapperFactory dbCtxWrapperFactory) {
         DbCtxWrapperFactory = dbCtxWrapperFactory;
     }
 
-    public void UseDbCtxWrapper(IDbCtxWrapper dbCtxWrapper)
-    {
+    public void UseDbCtxWrapper(IDbCtxWrapper dbCtxWrapper) {
         if (_externalDbCtxWrapper == dbCtxWrapper) return;
 
         if (_externalDbCtxWrapper != null)
@@ -33,10 +30,8 @@ public abstract class DbOpBase : IDisposable, ITransferableDbCtxWrapper, IDbOpBa
         .UseDbCtxWrapper(this.DbCtxWrapper);
 
 
-    protected IDbCtxWrapper DbCtxWrapper
-    {
-        get
-        {
+    protected IDbCtxWrapper DbCtxWrapper {
+        get {
             if (_externalDbCtxWrapper != null)
                 return _externalDbCtxWrapper;
 

@@ -13,13 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.DbCtx", "Dotnets
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.Svc", "Dotnetsvcs.Svc\Dotnetsvcs.Svc.csproj", "{0DBF4620-94BD-468F-90EA-3D5969262C0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.Svc.DtoParm", "Dotnetsvcs.Svc.DtoParm\Dotnetsvcs.Svc.DtoParm.csproj", "{9A2AC58B-44C7-4C2B-A5AF-D419E26DE154}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.DtoParm", "Dotnetsvcs.DtoParm\Dotnetsvcs.DtoParm.csproj", "{9A2AC58B-44C7-4C2B-A5AF-D419E26DE154}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.Svc.Integration.Test", "Dotnetsvcs.Svc.Integration.Test\Dotnetsvcs.Svc.Integration.Test.csproj", "{1D9CA46C-DF20-47A6-BEF9-6C9889FE6FA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.Svc.DtoResult", "Dotnetsvcs.Svc.DtoResult\Dotnetsvcs.Svc.DtoResult.csproj", "{83AA947A-629A-446F-8A5E-979B4452C750}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.DtoResult", "Dotnetsvcs.DtoResult\Dotnetsvcs.DtoResult.csproj", "{83AA947A-629A-446F-8A5E-979B4452C750}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs", "Dotnetsvcs\Dotnetsvcs.csproj", "{A63C7001-8397-4EC8-BAE2-2A3610292C2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnetsvcs.Svc.Abstractions", "Dotnetsvcs.Svc.Abstractions\Dotnetsvcs.Svc.Abstractions.csproj", "{992E3F44-6F27-487A-8F13-42ACF73DAD1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{A63C7001-8397-4EC8-BAE2-2A3610292C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A63C7001-8397-4EC8-BAE2-2A3610292C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A63C7001-8397-4EC8-BAE2-2A3610292C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992E3F44-6F27-487A-8F13-42ACF73DAD1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992E3F44-6F27-487A-8F13-42ACF73DAD1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992E3F44-6F27-487A-8F13-42ACF73DAD1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992E3F44-6F27-487A-8F13-42ACF73DAD1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

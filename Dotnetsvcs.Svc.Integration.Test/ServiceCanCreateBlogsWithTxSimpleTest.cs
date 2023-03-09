@@ -1,24 +1,22 @@
 using Dotnetsvcs.DbCtx.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.DependencyInjection;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.BlogParm.Create;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Abstractions;
-using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.MSDbContext;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Projections.Abstractions.BlogProjections;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.TestUtils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc.Integration.Test;
 
-public class ServiceCanCreateBlogsWithTxSimpleTest
-{
+public class ServiceCanCreateBlogsWithTxSimpleTest {
     private readonly FakeLogger Logger;
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreateBlogsWithTxSimpleTest()
-    {
+    public ServiceCanCreateBlogsWithTxSimpleTest() {
         // Arrange (Environment)
         Logger =
             new FakeLogger();
@@ -39,8 +37,7 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
     }
 
     [Fact]
-    public async Task CreatingBlogsWithTxTest()
-    {
+    public async Task CreatingBlogsWithTxTest() {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
@@ -73,15 +70,19 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
             Titol = "adeu",
         };
 
+        var projection =
+            ServiceProvider
+            .GetRequiredService<IBlogDefaultProjection>();
+
         // Act
-        using var tx = 
+        using var tx =
             dbCtxWrapper.BeginTransaction();
 
         var blog1 =
-            await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
+            await createBlogSvc.Do(parm1, projection, dbCtxWrapper);
 
         var blog2 =
-            await createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
+            await createBlogSvc.Do(parm2, projection, dbCtxWrapper);
 
         tx.Commit();
         tx.Dispose();

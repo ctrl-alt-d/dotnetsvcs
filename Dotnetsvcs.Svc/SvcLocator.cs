@@ -4,10 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc;
 
-public class SvcLocator : ISvcLocator
-{
-    public SvcLocator(IServiceProvider serviceProvider)
-    {
+public class SvcLocator : ISvcLocator {
+    public SvcLocator(IServiceProvider serviceProvider) {
         ServiceProvider=serviceProvider;
     }
 

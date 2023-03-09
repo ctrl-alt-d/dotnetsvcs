@@ -1,6 +1,5 @@
 ﻿namespace Dotnetsvcs.DbCtx.Abstractions;
 
-public interface IDbCtxWrapperFactory
-{
+public interface IDbCtxWrapperFactory {
     IDbCtxWrapper CreateCtx();
 }

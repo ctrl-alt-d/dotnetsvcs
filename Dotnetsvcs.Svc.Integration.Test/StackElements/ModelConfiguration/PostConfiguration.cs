@@ -4,10 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.ModelConfiguration;
 public class PostConfiguration
-       : IEntityTypeConfiguration<Post>
-{
-    public void Configure(EntityTypeBuilder<Post> mConfiguration)
-    {
+       : IEntityTypeConfiguration<Post> {
+    public void Configure(EntityTypeBuilder<Post> mConfiguration) {
         mConfiguration.HasKey(x => x.Id);
 
         mConfiguration

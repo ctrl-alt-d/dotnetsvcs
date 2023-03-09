@@ -6,14 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.DbCtx.Test;
 
-public class InjectionTests
-{
-    public class MyDbContext : DbContext
-    { }
+public class InjectionTests {
+    public class MyDbContext : DbContext { }
 
     [Fact]
-    public void WrapperFactoryIsInjectedProperly()
-    {
+    public void WrapperFactoryIsInjectedProperly() {
         // Arrange
         var serviceProvider =
             new ServiceCollection()
