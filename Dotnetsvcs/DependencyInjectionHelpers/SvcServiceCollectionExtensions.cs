@@ -1,4 +1,5 @@
 ﻿using Dotnetsvcs.Svc;
+using Dotnetsvcs.Svc.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -9,34 +10,34 @@ internal static class SvcServiceCollectionExtensions
     internal static IServiceCollection AddPreconditions(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
-        .Add(assembly, typeof(PreConditions<>));
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(IPreCondition<>));
 
     internal static IServiceCollection AddPostConditions(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
-        .Add(assembly, typeof(PostConditions<,>));
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(IPostCondition<,>));
 
     internal static IServiceCollection AddCreate(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
-        .Add(assembly, typeof(DbOpCreate<,>));
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(DbOpCreate<,>));
 
     internal static IServiceCollection AddUpdate(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
-        .Add(assembly, typeof(DbOpUpdate<,>));
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(DbOpUpdate<,>));
 
     internal static IServiceCollection AddDelete(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
-        .Add(assembly, typeof(DbOpDelete<,>));
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(DbOpDelete<,>));
 
     internal static IServiceCollection AddRetrieve(this IServiceCollection serviceCollection, Assembly assembly)
         =>
         serviceCollection
-        .Add(assembly, typeof(DbOpRetrieve<,,>));
+        .AddWithInterfaceIfImplementsGenericInterface(assembly, typeof(DbOpRetrieve<,,>));
 
-    private static IServiceCollection Add(this IServiceCollection serviceCollection, Assembly assembly, Type target)
+    private static IServiceCollection AddWithInterfaceIfImplementsGenericInterface(this IServiceCollection serviceCollection, Assembly assembly, Type target)
     {
         var items =
             assembly
@@ -50,4 +51,5 @@ internal static class SvcServiceCollectionExtensions
 
         return serviceCollection;
     }
+
 }

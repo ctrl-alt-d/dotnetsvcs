@@ -11,8 +11,12 @@ public abstract class DbOpCreate<T, TParms> :
     where T : class
     where TParms : DtoParmCreate
 {
-    protected DbOpCreate(IDbCtxWrapperFactory dbCtxWrapperFactory, IPreConditions<TParms> preConditions, IPostConditions<T, TParms> postConditions) :
-        base(dbCtxWrapperFactory, preConditions, postConditions)
+    protected DbOpCreate(
+        IDbCtxWrapperFactory dbCtxWrapperFactory, 
+        IPreCondition<TParms> preCondition, 
+        IPostCondition<T, TParms> postCondition
+        ) :
+        base(dbCtxWrapperFactory, preCondition, postCondition)
     {
     }
 
@@ -35,16 +39,16 @@ public abstract class DbOpCreate<T, TParms> :
 
         if (SaveChangesFlag) await DbCtxWrapper.SaveChangesAsync(cancellationToken);
 
-        await PostActions(entity, cancellationToken);
+        await PostActions(parms, entity, cancellationToken);
 
         await CheckPostConditions(entity, parms, cancellationToken);
 
         var result =
+            await
             DbCtxWrapper
-            .Set<T>()
-            .Where(x => x == entity)
-            .Select(projection)
-            .First();
+            .FirstWithProjectionAsync(
+                projection: projection,
+                where: x => x == entity);
 
         return result;
     }

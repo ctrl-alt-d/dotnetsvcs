@@ -1,7 +1,7 @@
 ﻿using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
 using System.Linq.Expressions;
 
-namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs;
+namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create.Artifacts;
 
 public static class BlogDefaultProjection
 {
@@ -13,6 +13,7 @@ public static class BlogDefaultProjection
             TimeStamp = blog.TimeStamp,
             CategoriaKey = blog.Categoria == null ? null : new object[] { blog.Categoria!.Id },
             CategoriaDisplay = blog.Categoria == null ? "" : blog.Categoria!.Titol,
-            Rating = blog.Rating
+            Rating = blog.Rating,
+            NumPostsCalculated = blog.Posts.Count(),
         };
 }

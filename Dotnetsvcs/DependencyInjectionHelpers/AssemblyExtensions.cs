@@ -4,7 +4,7 @@ namespace Dotnetsvcs.DependencyInjectionHelpers;
 
 internal static class AssemblyExtensions
 {
-
+      
     internal static List<DIItem> TypesWithGenericTypeDefinition(this Assembly assembly, Type target)
     {
         var types =
@@ -12,7 +12,7 @@ internal static class AssemblyExtensions
             .GetTypes()
             .ToList();
 
-        var intefaces =
+        var interfaces =
             types
             .Where(t => t.IsInterface)
             .ToList();
@@ -21,8 +21,10 @@ internal static class AssemblyExtensions
             types
             .Where(t => !t.IsAbstract && !t.IsInterface)
             .Where(t => t.BaseType != null)
-            .Where(t => t.BaseType!.IsGenericType)
-            .Where(t => t.BaseType!.GetGenericTypeDefinition() == target)
+            .Where(t =>
+                (t.BaseType!.IsGenericType && t.BaseType!.GetGenericTypeDefinition() == target) ||
+                t.GetInterfaces().Where(i => i.IsGenericType).Any(i => i.GetGenericTypeDefinition() == target)
+                )
             .ToList();
 
         var implementationInterfaceList =
@@ -30,7 +32,7 @@ internal static class AssemblyExtensions
             .Select(implementationType =>
                 (
                     implementationType,
-                    interfaceType: implementationType.MyInterface(intefaces)
+                    interfaceType: implementationType.MyInterface(interfaces)
                 )
             )
             .ToList();

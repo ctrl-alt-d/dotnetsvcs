@@ -6,15 +6,13 @@ public static class CtxWrapperFindExtensions
 {
     public static async Task<T> FindOrException<T>(
         this IDbCtxWrapper ctx,
-        object?[]? pk,
-        string? msg = null,
-        CancellationToken cancellationToken = default
+        params object?[]? pk
         )
         where T : class
     {
-        var entity = await ctx.FindAsync<T>(pk, cancellationToken);
+        var entity = await ctx.FindAsync<T>(pk);
 
-        if (entity == null) throw new SvcException(msg ?? "No s'ha trobat aquesta dada");
+        if (entity == null) throw new SvcException("Not found");
 
         return entity;
     }

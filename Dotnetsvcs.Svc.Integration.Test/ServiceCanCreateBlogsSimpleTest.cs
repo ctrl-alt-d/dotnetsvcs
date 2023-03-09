@@ -11,13 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc.Integration.Test;
 
-public class ServiceCanCreateBlogsWithTxSimpleTest
-{
+public class ServiceCanCreateBlogsSimpleTest {
     private readonly FakeLogger Logger;
     private readonly ServiceProvider ServiceProvider;
     private readonly TestDbContext Ctx;
 
-    public ServiceCanCreateBlogsWithTxSimpleTest()
+    public ServiceCanCreateBlogsSimpleTest()
     {
         // Arrange (Environment)
         Logger =
@@ -39,20 +38,16 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
     }
 
     [Fact]
-    public async Task CreatingBlogsWithTxTest()
+    public async Task CreatingBlogsTest()
     {
         // Arrange
         using var createBlogSvc =
             ServiceProvider
             .GetRequiredService<ICreateBlogService>();
 
-        using var dbCtxWrapper =
-            ServiceProvider
-            .GetRequiredService<IDbCtxWrapperFactory>()
-            .CreateCtx();
-
         var parm1 =
-            new CreateBlogParms() {
+            new CreateBlogParms()
+            {
                 Rating = 10,
                 Titol = "hola",
             };
@@ -63,7 +58,8 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
         };
 
         var parm2 =
-            new CreateBlogParms() {
+            new CreateBlogParms()
+            {
                 Rating = 20,
                 Titol = "adeu",
             };
@@ -74,18 +70,13 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
         };
 
         // Act
-        using var tx = 
-            dbCtxWrapper.BeginTransaction();
 
         var blog1 =
-            await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
+            await createBlogSvc.Do(parm1, BlogDefaultProjection.ToDtoResult);
 
         var blog2 =
-            await createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult, dbCtxWrapper);
+            await createBlogSvc.Do(parm2, BlogDefaultProjection.ToDtoResult);
 
-        tx.Commit();
-        tx.Dispose();
-        dbCtxWrapper.Dispose();
         createBlogSvc.Dispose();
 
         // Assert
@@ -93,7 +84,6 @@ public class ServiceCanCreateBlogsWithTxSimpleTest
             .Set<Blog>()
             .Should()
             .HaveCount(2);
-
 
         Ctx
             .Set<Blog>()

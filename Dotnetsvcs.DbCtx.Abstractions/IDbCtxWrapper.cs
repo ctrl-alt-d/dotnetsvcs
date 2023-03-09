@@ -20,6 +20,14 @@ public interface IDbCtxWrapper : IDisposable
     IQueryable<T> Set<T>()
         where T : class;
 
+    Task<TProjection> FirstWithProjectionAsync<T, TProjection>(
+        Expression<Func<T, TProjection>> projection,
+        Expression<Func<T, bool>> where
+        )
+        where T : class
+        where TProjection: class;
+
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     ValueTask<T?> FindAsync<T>(params object?[]? keyValues)
