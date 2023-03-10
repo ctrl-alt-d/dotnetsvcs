@@ -1,0 +1,42 @@
+﻿@page "/"
+
+@inject IBlogFacade BlogFacade;
+@inherits OwningComponentBase
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+@if (QS == null) {
+    <span>Loading data ...</span>
+}
+else {
+    <input type="text" @bind=filter @bind:event="oninput" />
+    <ul>
+        @foreach (var item in QS.Where(b => b.Titol.Contains(filter)).Select(b => new { b.Titol })) {
+            <li>@item.Titol</li>
+        }
+    </ul>
+}
+
+<button @onclick=CreaBlog>Crear blog</button>
+
+@code {
+    protected string filter = "";
+
+    IQueryable<Blog>? QS;
+
+    protected override async Task OnInitializedAsync() {
+        QS = await BlogFacade.Retrieve();
+    }
+
+    protected async Task CreaBlog() {
+
+        var parm = new MyApp.DtoParm.BlogParm.Create.CreateBlogParms()
+        {
+            Titol = Guid.NewGuid().ToString(),
+            WithNposts = 10
+        };
+        var result = await BlogFacade.Create(parm);
+    }
+}

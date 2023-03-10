@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Dotnetsvcs.Facade.Abstractions\Dotnetsvcs.Facade.Abstractions.csproj" />
+    <ProjectReference Include="..\MyApp.DtoData\MyApp.DtoData.csproj" />
+    <ProjectReference Include="..\MyApp.DtoParm\MyApp.DtoParm.csproj" />
+    <ProjectReference Include="..\MyApp.Facade.BlazorServer.Abstractions\MyApp.Facade.BlazorServer.Abstractions.csproj" />
+    <ProjectReference Include="..\MyApp.Projections.Abstractions\MyApp.Projections.Abstractions.csproj" />
+    <ProjectReference Include="..\MyApp.Svc.Abstractions\MyApp.Svcs.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
