@@ -1,7 +1,6 @@
 ﻿@page "/"
 
-@inject IBlogFacade BlogFacade;
-@inherits OwningComponentBase
+@inherits OwningComponentBase<IBlogFacade>
 
 <PageTitle>Index</PageTitle>
 
@@ -26,6 +25,8 @@ else {
 
 <button @onclick=CreaBlogAmbTx>Crear blog amb tx</button>
 
+<a href="/page2">Go page 2</a>
+
 
 @code {
     protected string filter = "";
@@ -33,7 +34,7 @@ else {
     IQueryable<Blog>? QS;
 
     protected override async Task OnInitializedAsync() {
-        QS = await BlogFacade.Retrieve();
+        QS = await Service.Retrieve();
     }
 
     protected async Task CreaBlog() {
@@ -43,7 +44,7 @@ else {
             Titol = Guid.NewGuid().ToString(),
             WithNposts = 10
         };
-        var result = await BlogFacade.Create(parm);
+        var result = await Service.Create(parm);
     }
 
     protected async Task CreaBlogAmbTx() {
@@ -52,8 +53,7 @@ else {
                 Titol = Guid.NewGuid().ToString(),
                 WithNposts = 10
             };
-        var result = await BlogFacade.CreateWithTx(parm);
+        var result = await Service.CreateWithTx(parm);
     }
-
 
 }
