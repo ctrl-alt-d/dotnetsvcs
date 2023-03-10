@@ -9,11 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using MyApp.Facade.BlazorServer.Abstractions;
 using MyApp.Facade.BlazorServer;
 
+using Syncfusion.Blazor;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddSyncfusionBlazor();
 
 builder.Services.AddDbContextFactory<TestDbContext>(
     o => o.UseSqlite("Data Source=Application.db;Cache=Shared"));

@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
+		<PackageReference Include="Syncfusion.Blazor" Version="20.4.0.53" />
 
 		<ProjectReference Include="..\..\src\Dotnetsvcs\Dotnetsvcs.csproj" />
 		
