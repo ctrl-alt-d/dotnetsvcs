@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Dotnetsvcs.Svc.Abstractions\Dotnetsvcs.Svc.Abstractions.csproj" />
+    <ProjectReference Include="..\MyApp.DtoParm\MyApp.DtoParm.csproj" />
+    <ProjectReference Include="..\MyApp.DtoData\MyApp.DtoData.csproj" />
+    <ProjectReference Include="..\MyApp.Models\MyApp.Models.csproj" />
+  </ItemGroup>
+
+</Project>

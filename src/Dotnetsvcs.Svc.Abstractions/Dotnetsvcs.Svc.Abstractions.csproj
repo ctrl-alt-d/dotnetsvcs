@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dotnetsvcs.DbCtx.Abstractions\Dotnetsvcs.DbCtx.Abstractions.csproj" />
+    <ProjectReference Include="..\Dotnetsvcs.DtoParm.Abstractions\Dotnetsvcs.DtoParm.Abstractions.csproj" />
+    <ProjectReference Include="..\Dotnetsvcs.DtoData.Abstractions\Dotnetsvcs.DtoData.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
