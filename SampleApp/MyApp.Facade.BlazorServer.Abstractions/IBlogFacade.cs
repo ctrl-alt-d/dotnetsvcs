@@ -6,5 +6,6 @@ using MyApp.Models;
 namespace MyApp.Facade.BlazorServer.Abstractions; 
 public interface IBlogFacade:  IFacade {
     Task<DtoResult<BlogDtoData>> Create(CreateBlogParms parms);
+    Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms);
     Task<IQueryable<Blog>> Retrieve();
 }

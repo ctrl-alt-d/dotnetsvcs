@@ -35,11 +35,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.Svc", "..\src\Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.Facade.Abstractions", "..\src\Dotnetsvcs.Facade.Abstractions\Dotnetsvcs.Facade.Abstractions.csproj", "{FAFCEA6B-2551-4A8B-927F-61B5303FEE4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.Facade.BlazorServer", "MyApp.Facade.BlazorServer\MyApp.Facade.BlazorServer.csproj", "{6C0D920C-4942-4DF3-8DD4-4F9C94D90916}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp.Facade.BlazorServer", "MyApp.Facade.BlazorServer\MyApp.Facade.BlazorServer.csproj", "{6C0D920C-4942-4DF3-8DD4-4F9C94D90916}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.Facade.BlazorServer.Abstractions", "MyApp.Facade.BlazorServer.Abstractions\MyApp.Facade.BlazorServer.Abstractions.csproj", "{98C5F963-0606-4762-B624-843D1BF23349}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp.Facade.BlazorServer.Abstractions", "MyApp.Facade.BlazorServer.Abstractions\MyApp.Facade.BlazorServer.Abstractions.csproj", "{98C5F963-0606-4762-B624-843D1BF23349}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.DbCtx.Abstractions", "..\src\Dotnetsvcs.DbCtx.Abstractions\Dotnetsvcs.DbCtx.Abstractions.csproj", "{490C7DB0-96FA-4BA8-A803-A1272A2E73E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnetsvcs.DbCtx", "..\src\Dotnetsvcs.DbCtx\Dotnetsvcs.DbCtx.csproj", "{FF285BC3-4AAD-47E8-B952-5BDD29993DB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +121,10 @@ Global
 		{490C7DB0-96FA-4BA8-A803-A1272A2E73E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{490C7DB0-96FA-4BA8-A803-A1272A2E73E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{490C7DB0-96FA-4BA8-A803-A1272A2E73E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF285BC3-4AAD-47E8-B952-5BDD29993DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF285BC3-4AAD-47E8-B952-5BDD29993DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF285BC3-4AAD-47E8-B952-5BDD29993DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF285BC3-4AAD-47E8-B952-5BDD29993DB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{87B5DF8E-542C-4F0E-8139-D7D9AFE329A4} = {FEEE716B-EC4F-4571-8EBE-7FF2A6E22944}
 		{FAFCEA6B-2551-4A8B-927F-61B5303FEE4D} = {FEEE716B-EC4F-4571-8EBE-7FF2A6E22944}
 		{490C7DB0-96FA-4BA8-A803-A1272A2E73E8} = {FEEE716B-EC4F-4571-8EBE-7FF2A6E22944}
+		{FF285BC3-4AAD-47E8-B952-5BDD29993DB2} = {FEEE716B-EC4F-4571-8EBE-7FF2A6E22944}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4686F87A-94E1-4A31-9E04-68F5679EFD54}

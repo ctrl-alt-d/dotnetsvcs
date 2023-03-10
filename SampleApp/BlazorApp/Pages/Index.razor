@@ -13,13 +13,19 @@
 else {
     <input type="text" @bind=filter @bind:event="oninput" />
     <ul>
-        @foreach (var item in QS.Where(b => b.Titol.Contains(filter)).Select(b => new { b.Titol })) {
-            <li>@item.Titol</li>
+        @foreach (
+            var item
+            in QS.Where(b => b.Titol.Contains(filter)).Select(b => new { b.Titol, aggCountPost = b.Posts.Count() })
+        ) {
+            <li>@item.Titol Num Posts: @item.aggCountPost</li>
         }
     </ul>
 }
 
 <button @onclick=CreaBlog>Crear blog</button>
+
+<button @onclick=CreaBlogAmbTx>Crear blog amb tx</button>
+
 
 @code {
     protected string filter = "";
@@ -39,4 +45,15 @@ else {
         };
         var result = await BlogFacade.Create(parm);
     }
+
+    protected async Task CreaBlogAmbTx() {
+
+        var parm = new MyApp.DtoParm.BlogParm.Create.CreateBlogParms() {
+                Titol = Guid.NewGuid().ToString(),
+                WithNposts = 10
+            };
+        var result = await BlogFacade.CreateWithTx(parm);
+    }
+
+
 }

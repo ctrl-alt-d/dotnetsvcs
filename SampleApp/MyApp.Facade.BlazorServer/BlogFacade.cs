@@ -23,13 +23,20 @@ public class BlogFacade : IBlogFacade {
     protected virtual IRetrieveBlogService RetrieveBlogService { get; }
     protected virtual IProjectorFactory<IBlogDefaultProjection> BlogProjectionFactory { get; }
 
-    public async Task<DtoResult<BlogDtoData>> Create(CreateBlogParms parms) {
+    public async Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms) {
         using var ctx = DbCtxWrapperFactory.CreateCtx();
         using var tx = ctx.BeginTransaction();
         using var svc = CreateBlogServiceFactory.Create();
         using var projection = BlogProjectionFactory.Create();
         var operation = () => svc.Do(parms, projection, ctx);
         return await operation.TryCatch(tx);
+    }
+
+    public async Task<DtoResult<BlogDtoData>> Create(CreateBlogParms parms) {
+        using var svc = CreateBlogServiceFactory.Create();
+        using var projection = BlogProjectionFactory.Create();
+        var operation = () => svc.Do(parms, projection);
+        return await operation.TryCatch();
     }
 
     public void Dispose() {
