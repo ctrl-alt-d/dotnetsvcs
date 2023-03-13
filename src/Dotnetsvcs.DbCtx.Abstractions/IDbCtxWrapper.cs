@@ -23,6 +23,7 @@ public interface IDbCtxWrapper : IDisposable {
         where T : class;
 
     Task<TProjection> FirstWithProjectionAsync<T, TProjection>(
+        Expression<Func<T, bool>> filter,
         Expression<Func<T, bool>> where,
         Expression<Func<T, TProjection>> projection
         )

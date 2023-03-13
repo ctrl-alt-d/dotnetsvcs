@@ -4,6 +4,7 @@ using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.PostSvcs.Create;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.PostSvcs.Create.PostConditions;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.PostSvcs.Create.PreConditions;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Filters.Abstractions.PostFilters;
 
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.PostSvcs.Create;
 
@@ -11,9 +12,10 @@ public class CreatePostService : DbOpCreate<Post, CreatePostParms>, ICreatePostS
     public CreatePostService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreatePostPreConditions preConditions,
-        ICreatePostPostConditions postConditions
+        ICreatePostPostConditions postConditions,
+        IPostDefaultFilter filter
         )
-        : base(dbCtxWrapperFactory, preConditions, postConditions) {
+        : base(dbCtxWrapperFactory, preConditions, postConditions, filter) {
     }
 
     protected override async Task<Post> CreateEntityFromParms(CreatePostParms parms, CancellationToken cancellationToken = default) {

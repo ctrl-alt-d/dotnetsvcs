@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions {
         .AddProjections(assembyProjectionsImplementations, assemblyProjectionsAbstractions)
 
         // app services
+        .AddFilters(assembySvcImplementations, assemblySvcAbstractions)
         .AddPreconditions(assembySvcImplementations, assemblySvcAbstractions)
         .AddPostConditions(assembySvcImplementations, assemblySvcAbstractions)
         .AddCreate(assembySvcImplementations, assemblySvcAbstractions)

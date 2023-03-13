@@ -8,6 +8,7 @@ using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.C
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create.PostConditions;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Create.PreConditions;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.PostSvcs.Create;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Filters.Abstractions.BlogFilters;
 
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
 
@@ -19,9 +20,10 @@ public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogS
         ICreateBlogPreConditions preConditions,
         ICreateBlogPostConditions postConditions,
         ISvcFactory<ICreatePostService> createPostServiceFactory,
-        IProjectorFactory<IPostDefaultProjection> postDefaultProjectionFactory
+        IProjectorFactory<IPostDefaultProjection> postDefaultProjectionFactory,
+        IBlogDefaultFilter filter
         )
-        : base(dbCtxWrapperFactory, preConditions, postConditions) {
+        : base(dbCtxWrapperFactory, preConditions, postConditions, filter) {
         CreatePostServiceFactory = createPostServiceFactory;
         PostDefaultProjectionFactory = postDefaultProjectionFactory;
     }

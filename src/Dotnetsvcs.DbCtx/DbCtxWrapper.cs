@@ -104,6 +104,7 @@ public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
         .Dispose();
 
     public Task<TProjection> FirstWithProjectionAsync<T, TProjection>(
+        Expression<Func<T, bool>> filter,
         Expression<Func<T, bool>> where,
         Expression<Func<T, TProjection>> projection
         )
@@ -113,6 +114,7 @@ public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
         DbContext
         .Set<T>()
         .Where(where)
+        .Where(filter)
         .AsNoTracking()
         .Select(projection)
         .FirstAsync();

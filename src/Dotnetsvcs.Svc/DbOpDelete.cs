@@ -1,5 +1,6 @@
 ﻿using Dotnetsvcs.DtoParm.Abstractions;
 using Dotnetsvcs.Svc.Abstractions;
+using Dotnetsvcs.Svc.Abstractions.Filter;
 using Dotnetsvcs.Svc.BaseOps;
 using Dotnetsvcs.Svc.CtxWrapperHelpers;
 
@@ -10,9 +11,10 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
     protected DbOpDelete(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
-        IPostCondition<T, TParms> postCondition
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
         ) :
-        base(dbCtxWrapperFactory, preCondition, postCondition) {
+        base(dbCtxWrapperFactory, preCondition, postCondition, filter) {
     }
 
     public override async Task<TDtoData> Do<TDtoData>(
@@ -33,6 +35,7 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
             DbCtxWrapper
             .FirstWithProjectionAsync(
                 where: x => x == entity,
+                filter: Filter.GetFilter(DbCtxWrapper),
                 projection: projection.GetToDtoData(DbCtxWrapper)
             );
 

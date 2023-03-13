@@ -5,6 +5,7 @@ using MyApp.DtoParm.BlogParm.Create;
 using MyApp.DtoParm.PostParm.Create;
 using MyApp.Models;
 using MyApp.Projections.Abstractions.PostProjections;
+using MyApp.Svcs.Abstractions.BlogSvcs;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create.PostConditions;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create.PreConditions;
@@ -14,19 +15,20 @@ namespace MyApp.Svcs.BlogSvcs.Create;
 
 public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogService
 {
-    protected virtual ISvcFactory<ICreatePostService> SvcFactory { get; }
-    protected virtual IProjectorFactory<IPostDefaultProjection> ProjectorFactory { get; }
+    protected virtual ISvcFactory<ICreatePostService> PostCreateSvcFactory { get; }
+    protected virtual IProjectorFactory<IPostDefaultProjection> PostProjectorFactory { get; }
     public CreateBlogService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreateBlogPreConditions preConditions,
         ICreateBlogPostConditions postConditions,
         ISvcFactory<ICreatePostService> svcFactory,
-        IProjectorFactory<IPostDefaultProjection> projectorLocator
+        IProjectorFactory<IPostDefaultProjection> projectorLocator,
+        IBlogDefaultFilter filter
         )
-        : base(dbCtxWrapperFactory, preConditions, postConditions)
+        : base(dbCtxWrapperFactory, preConditions, postConditions, filter)
     {
-        SvcFactory = svcFactory;
-        ProjectorFactory = projectorLocator;
+        PostCreateSvcFactory = svcFactory;
+        PostProjectorFactory = projectorLocator;
     }
 
     protected override async Task<Blog> CreateEntityFromParms(CreateBlogParms parms, CancellationToken cancellationToken = default)
@@ -46,8 +48,8 @@ public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogS
 
     protected override async Task PostActions(CreateBlogParms parms, Blog entity, CancellationToken cancellationToken = default)
     {
-        var createPostService = SvcFactory.Create();
-        var postProjection = ProjectorFactory.Create();
+        var createPostService = PostCreateSvcFactory.Create();
+        var postProjection = PostProjectorFactory.Create();
 
         foreach (var i in Enumerable.Range(0, parms.WithNposts))
         {

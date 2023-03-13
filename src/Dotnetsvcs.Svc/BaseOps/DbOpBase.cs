@@ -1,4 +1,5 @@
 ﻿using Dotnetsvcs.Svc.Abstractions.BaseOps;
+using Dotnetsvcs.Svc.Abstractions.Filter;
 using Dotnetsvcs.Svc.Abstractions.HelperInterfaces;
 
 namespace Dotnetsvcs.Svc.BaseOps;
@@ -12,11 +13,11 @@ public abstract class DbOpBase : IDisposable, IDbOpBase {
         DbCtxWrapperFactory = dbCtxWrapperFactory;
     }
 
-    protected void UseDbCtxWrapper(IDbCtxWrapper dbCtxWrapper) {
+    protected virtual void UseDbCtxWrapper(IDbCtxWrapper dbCtxWrapper) {
         _externalDbCtxWrapper = dbCtxWrapper;
     }
 
-    protected IDbCtxWrapper DbCtxWrapper {
+    protected virtual IDbCtxWrapper DbCtxWrapper {
         get {
             if (_externalDbCtxWrapper != null)
                 return _externalDbCtxWrapper;

@@ -1,6 +1,7 @@
 ﻿using Dotnetsvcs.Facade.Abstractions;
 using Dotnetsvcs.Svc;
 using Dotnetsvcs.Svc.Abstractions;
+using Dotnetsvcs.Svc.Abstractions.Filter;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -13,6 +14,11 @@ internal static class SvcServiceCollectionExtensions {
         serviceCollection
         .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(IFacade));
 
+
+    internal static IServiceCollection AddFilters(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
+        =>
+        serviceCollection
+        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(IFilter<>));
 
     internal static IServiceCollection AddProjections(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
         =>

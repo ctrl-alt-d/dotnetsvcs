@@ -1,5 +1,6 @@
 ﻿using Dotnetsvcs.DtoParm.Abstractions;
 using Dotnetsvcs.Svc.Abstractions;
+using Dotnetsvcs.Svc.Abstractions.Filter;
 using Dotnetsvcs.Svc.BaseOps;
 
 namespace Dotnetsvcs.Svc;
@@ -12,9 +13,10 @@ public abstract class DbOpCreate<T, TParms> :
     protected DbOpCreate(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
-        IPostCondition<T, TParms> postCondition
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
         ) :
-        base(dbCtxWrapperFactory, preCondition, postCondition) {
+        base(dbCtxWrapperFactory, preCondition, postCondition, filter) {
     }
 
     protected abstract Task<T> CreateEntityFromParms(TParms parms, CancellationToken cancellationToken = default);
@@ -44,6 +46,7 @@ public abstract class DbOpCreate<T, TParms> :
             DbCtxWrapper
             .FirstWithProjectionAsync(                
                 where: x => x == entity,
+                filter: Filter.GetFilter(DbCtxWrapper),
                 projection: projection.GetToDtoData(DbCtxWrapper)
             );
 
