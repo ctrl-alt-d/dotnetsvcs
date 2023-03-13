@@ -7,6 +7,6 @@ namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Filters.PostFilters
 
 public class PostDefaultFilter : IPostDefaultFilter {
     public Expression<Func<Post, bool>> GetFilter(IDbCtxWrapper ctx) {
-        return _ => true;
+        return post => !post.IsSoftDeleted;
     }
 }
