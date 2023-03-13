@@ -34,8 +34,8 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
             DbCtxWrapper
             .FirstWithProjectionAsync(
                 where: x => x == entity,
-                filter: Filter.GetFilter(DbCtxWrapper),
-                projection: projection.GetToDtoData(DbCtxWrapper)
+                filter: await Filter.GetFilter(DbCtxWrapper),
+                projection: await projection.GetToDtoData(DbCtxWrapper)
             );
 
         DbCtxWrapper.Remove(entity);

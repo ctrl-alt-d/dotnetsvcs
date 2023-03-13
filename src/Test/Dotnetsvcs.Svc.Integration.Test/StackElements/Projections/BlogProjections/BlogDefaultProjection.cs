@@ -18,8 +18,8 @@ public class BlogDefaultProjection : IBlogDefaultProjection {
     public void Dispose() {
     }
 
-    public Expression<Func<Blog, BlogDtoResult>> GetToDtoData(IDbCtxWrapper ctx) {
-        var postFilter = PostFilter.GetFilter(ctx);
+    public async Task<Expression<Func<Blog, BlogDtoResult>>> GetToDtoData(IDbCtxWrapper ctx) {
+        var postFilter = await PostFilter.GetFilter(ctx);
         return blog => new BlogDtoResult {
             Titol = blog.Titol,
             Preu = blog.Preu,

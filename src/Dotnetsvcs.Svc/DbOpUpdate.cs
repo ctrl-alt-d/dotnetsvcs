@@ -44,8 +44,8 @@ public abstract class DbOpUpdate<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpUpdat
             DbCtxWrapper
             .FirstWithProjectionAsync(
                 where: x => x == entity,
-                filter: Filter.GetFilter(DbCtxWrapper),
-                projection: projection.GetToDtoData(DbCtxWrapper)
+                filter: await Filter.GetFilter(DbCtxWrapper),
+                projection: await projection.GetToDtoData(DbCtxWrapper)
             );
 
         return result;

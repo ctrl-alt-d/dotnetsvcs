@@ -7,8 +7,9 @@ namespace MyApp.Svcs.PostSvcs.Common.Filters;
 
 public class PostDefaultFilter : IPostDefaultFilter
 {
-    public Expression<Func<Post, bool>> GetFilter(IDbCtxWrapper ctx)
+    public async Task<Expression<Func<Post, bool>>> GetFilter(IDbCtxWrapper ctx)
     {
+        await Task.CompletedTask;
         return _ => true;
     }
 }

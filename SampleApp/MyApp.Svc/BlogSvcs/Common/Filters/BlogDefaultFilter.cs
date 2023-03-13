@@ -7,8 +7,9 @@ namespace MyApp.Svcs.BlogSvcs.Common.Filters;
 
 public class BlogDefaultFilter : IBlogDefaultFilter
 {
-    public Expression<Func<Blog, bool>> GetFilter(IDbCtxWrapper ctx)
+    public async Task<Expression<Func<Blog, bool>>> GetFilter(IDbCtxWrapper ctx)
     {
-        return _ => true;
+        await Task.CompletedTask;
+        return  _ => true;
     }
 }

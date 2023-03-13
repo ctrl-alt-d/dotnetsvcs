@@ -6,7 +6,8 @@ using System.Linq.Expressions;
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Filters.PostFilters;
 
 public class PostDefaultFilter : IPostDefaultFilter {
-    public Expression<Func<Post, bool>> GetFilter(IDbCtxWrapper ctx) {
+    public async Task<Expression<Func<Post, bool>>> GetFilter(IDbCtxWrapper ctx) {
+        await Task.CompletedTask;
         return post => !post.IsSoftDeleted;
     }
 }

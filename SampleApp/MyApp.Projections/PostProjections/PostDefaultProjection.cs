@@ -11,7 +11,7 @@ public class PostDefaultProjection : IPostDefaultProjection
     public void Dispose() {        
     }
 
-    public Expression<Func<Post, PostDtoData>> GetToDtoData(IDbCtxWrapper dbCtxWrapper)
+    public async Task<Expression<Func<Post, PostDtoData>>> GetToDtoData(IDbCtxWrapper dbCtxWrapper)
     {
 
         var totalNumberOfBlogs = dbCtxWrapper.Set<Blog>().Count();
