@@ -52,7 +52,7 @@ internal static class SvcServiceCollectionExtensions {
     internal static IServiceCollection AddRetrieve(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
         =>
         serviceCollection
-        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(DbOpRetrieve<>));
+        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(DbOpRetrieve<,>));
 
     private static IServiceCollection AddWithInterfaceIfImplementsGenericInterface(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions, Type target) {
         var items =

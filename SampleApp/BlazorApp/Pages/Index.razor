@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using MyApp.DtoData.BlogDtosData;
+@using MyApp.DtoParm.BlogParm.Retrieve;
 
 @inherits OwningComponentBase<IBlogFacade>
 
@@ -24,10 +26,16 @@
 @code {
     protected string filter = "";
 
-    IQueryable<Blog>? QS;
+    List<BlogDtoData>? QS;
 
     protected override async Task OnInitializedAsync() {
-        QS = await Service.Retrieve();
+        var pams = new RetrieveBlogParms() { 
+            ItemsPerPage = int.MaxValue,
+            Page = 0, 
+        };
+
+        var response = await Service.Retrieve(pams);
+        QS = response.Data!.Items.ToList();
     }
 
     protected async Task CreaBlog() {
@@ -37,6 +45,10 @@
                 WithNposts = 10
             };
         var result = await Service.Create(parm);
+
+        QS!.Add(result.Data!);
+
+        await InvokeAsync(StateHasChanged);
     }
 
     protected async Task CreaBlogAmbTx() {
@@ -46,6 +58,10 @@
                 WithNposts = 10
             };
         var result = await Service.CreateWithTx(parm);
+
+        QS!.Add(result.Data!);
+
+        await InvokeAsync(StateHasChanged);
     }
 
 }

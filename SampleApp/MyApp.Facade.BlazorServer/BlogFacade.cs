@@ -5,22 +5,27 @@ using MyApp.Svcs.Abstractions.BlogSvcs.Create;
 using MyApp.Projections.Abstractions.BlogProjections;
 using Dotnetsvcs.DbCtx.Abstractions;
 using MyApp.Svcs.Abstractions.BlogSvcs.Retrieve;
-using MyApp.Models;
 using MyApp.Facade.BlazorServer.Abstractions;
 using Dotnetsvcs.Svc.Abstractions;
+using Dotnetsvcs.DtoData.Abstractions;
+using MyApp.DtoParm.BlogParm.Retrieve;
 
 namespace MyApp.Facade.BlazorServer;
 public class BlogFacade : IBlogFacade {
-    public BlogFacade(IDbCtxWrapperFactory dbCtxWrapperFactory, ISvcFactory<ICreateBlogService> createBlogServiceFactory, IRetrieveBlogService retrieveBlogService, IProjectionFactory<IBlogDefaultProjection> blogProjectionFactory) {
+    public BlogFacade(
+        IDbCtxWrapperFactory dbCtxWrapperFactory, 
+        ISvcFactory<ICreateBlogService> createBlogServiceFactory,
+        ISvcFactory<IRetrieveBlogService> retrieveBlogServiceFactory, 
+        IProjectionFactory<IBlogDefaultProjection> blogProjectionFactory) {
         DbCtxWrapperFactory=dbCtxWrapperFactory;
         CreateBlogServiceFactory=createBlogServiceFactory;
-        RetrieveBlogService=retrieveBlogService;
+        RetrieveBlogServiceFactory=retrieveBlogServiceFactory;
         BlogProjectionFactory=blogProjectionFactory;
     }
 
     protected virtual IDbCtxWrapperFactory DbCtxWrapperFactory { get; }
     protected virtual ISvcFactory<ICreateBlogService> CreateBlogServiceFactory { get; }
-    protected virtual IRetrieveBlogService RetrieveBlogService { get; }
+    protected virtual ISvcFactory<IRetrieveBlogService> RetrieveBlogServiceFactory { get; }
     protected virtual IProjectionFactory<IBlogDefaultProjection> BlogProjectionFactory { get; }
 
     public async Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms) {
@@ -40,12 +45,12 @@ public class BlogFacade : IBlogFacade {
     }
 
     public void Dispose() {
-        RetrieveBlogService.Dispose();
     }
 
-    public async Task<IQueryable<Blog>> Retrieve() {
-        var data = await RetrieveBlogService.Do();
-        return data;
+    public async Task<DtoResult<DtoDataRetrieve<BlogDtoData>>> Retrieve(RetrieveBlogParms parms) {
+        using var svc = RetrieveBlogServiceFactory.Create();
+        using var projection = BlogProjectionFactory.Create();
+        var operation = () => svc.Do(parms, projection);
+        return await operation.TryCatch();
     }
-
 }

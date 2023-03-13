@@ -15,20 +15,23 @@ namespace MyApp.Svcs.BlogSvcs.Create;
 
 public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogService
 {
-    protected virtual ISvcFactory<ICreatePostService> PostCreateSvcFactory { get; }
-    protected virtual IProjectionFactory<IPostDefaultProjection> PostProjectorFactory { get; }
+    // This service calls post service (*1):
+    protected virtual ISvcFactory<ICreatePostService> PostSvcFactory { get; }
+    protected virtual IProjectionFactory<IPostDefaultProjection> PostProjectionFactory { get; }
+
+    // Constructor
     public CreateBlogService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreateBlogPreConditions preConditions,
         ICreateBlogPostConditions postConditions,
         ISvcFactory<ICreatePostService> svcFactory,
-        IProjectionFactory<IPostDefaultProjection> projectorLocator,
+        IProjectionFactory<IPostDefaultProjection> postProjectionFactory,
         IBlogDefaultFilter filter
         )
         : base(dbCtxWrapperFactory, preConditions, postConditions, filter)
     {
-        PostCreateSvcFactory = svcFactory;
-        PostProjectorFactory = projectorLocator;
+        PostSvcFactory = svcFactory;
+        PostProjectionFactory = postProjectionFactory;
     }
 
     protected override async Task<Blog> CreateEntityFromParms(CreateBlogParms parms, CancellationToken cancellationToken = default)
@@ -48,8 +51,8 @@ public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogS
 
     protected override async Task PostActions(CreateBlogParms parms, Blog entity, CancellationToken cancellationToken = default)
     {
-        var createPostService = PostCreateSvcFactory.Create();
-        var postProjection = PostProjectorFactory.Create();
+        using var createPostService = PostSvcFactory.Create();
+        using var postProjection = PostProjectionFactory.Create();
 
         foreach (var i in Enumerable.Range(0, parms.WithNposts))
         {
@@ -60,7 +63,7 @@ public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogS
                 Descripcio = $"Post test {i}"
             };
 
-            await createPostService.Do(
+            await createPostService.Do(  // (*1)
                 createPostParms,
                 postProjection,
                 DbCtxWrapper,

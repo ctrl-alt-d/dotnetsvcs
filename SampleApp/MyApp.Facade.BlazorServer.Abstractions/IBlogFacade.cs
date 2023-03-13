@@ -1,11 +1,12 @@
-﻿using Dotnetsvcs.Facade.Abstractions;
+﻿using Dotnetsvcs.DtoData.Abstractions;
+using Dotnetsvcs.Facade.Abstractions;
 using MyApp.DtoData.BlogDtosData;
 using MyApp.DtoParm.BlogParm.Create;
-using MyApp.Models;
+using MyApp.DtoParm.BlogParm.Retrieve;
 
-namespace MyApp.Facade.BlazorServer.Abstractions; 
+namespace MyApp.Facade.BlazorServer.Abstractions;
 public interface IBlogFacade:  IFacade {
     Task<DtoResult<BlogDtoData>> Create(CreateBlogParms parms);
     Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms);
-    Task<IQueryable<Blog>> Retrieve();
+    Task<DtoResult<DtoDataRetrieve<BlogDtoData>>> Retrieve(RetrieveBlogParms pams);
 }
