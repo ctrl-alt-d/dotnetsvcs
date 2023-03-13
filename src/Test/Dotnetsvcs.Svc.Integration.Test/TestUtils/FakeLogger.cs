@@ -19,6 +19,8 @@ public class FakeLogger {
         var sani2 = string.Join(" ", sani1);
         var sani3 = sani2.Replace("\"", "").Trim();
         Log.Add(sani3);
+
+        LogSecondToLastEntry = LogLastEntry;
         LogLastEntry = sani3;
     }
 
@@ -28,7 +30,7 @@ public class FakeLogger {
 
     public List<string> Log { get; } = new();
     public string LogLastEntry { get; private set; } = "";
-
+    public string LogSecondToLastEntry { get; private set; } = "";
     public string ComparableLastEntry =>
         LogLastEntry
         .ComparableSql();

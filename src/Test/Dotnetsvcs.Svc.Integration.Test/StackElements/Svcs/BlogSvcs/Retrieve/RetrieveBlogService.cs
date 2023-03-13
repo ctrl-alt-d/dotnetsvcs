@@ -1,16 +1,18 @@
 ﻿using Dotnetsvcs.DbCtx.Abstractions;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.DtoParm.BlogParm.Retrieve;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Models;
 using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Abstractions.BlogSvcs.Retrieve;
+using Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Filters.Abstractions.BlogFilters;
 using System.Linq.Expressions;
 
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Retrieve;
-internal class RetrieveBlogService : DbOpRetrieve<Blog>, IRetrieveBlogService {
-    public RetrieveBlogService(IDbCtxWrapperFactory dbCtxWrapperFactory) : base(dbCtxWrapperFactory) {
+public class RetrieveBlogService : DbOpRetrieve<Blog, RetrieveBlogParms>, IRetrieveBlogService {
+    public RetrieveBlogService(IDbCtxWrapperFactory dbCtxWrapperFactory, IBlogDefaultFilter filter) : 
+        base(dbCtxWrapperFactory, filter) {
     }
 
-    protected override async Task<Expression<Func<Blog, bool>>> GetFilterExpression() {
-
+    protected override async Task<Expression<Func<Blog, bool>>> GetWhereFromParms(RetrieveBlogParms parms) {
         await Task.CompletedTask;
-        return (_) => true;
+        return _ => true;
     }
 }
