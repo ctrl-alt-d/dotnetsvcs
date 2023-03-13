@@ -2,7 +2,7 @@
 using Dotnetsvcs.Svc;
 using MyApp.DtoParm.PostParm.Create;
 using MyApp.Models;
-using MyApp.Svcs.Abstractions.PostSvcs;
+using MyApp.Svcs.Abstractions.PostSvcs.Common.Filters;
 using MyApp.Svcs.Abstractions.PostSvcs.Create;
 using MyApp.Svcs.Abstractions.PostSvcs.Create.PostConditions;
 using MyApp.Svcs.Abstractions.PostSvcs.Create.PreConditions;

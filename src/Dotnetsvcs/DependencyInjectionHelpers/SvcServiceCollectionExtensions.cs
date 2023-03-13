@@ -1,7 +1,6 @@
 ﻿using Dotnetsvcs.Facade.Abstractions;
 using Dotnetsvcs.Svc;
 using Dotnetsvcs.Svc.Abstractions;
-using Dotnetsvcs.Svc.Abstractions.Filter;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 

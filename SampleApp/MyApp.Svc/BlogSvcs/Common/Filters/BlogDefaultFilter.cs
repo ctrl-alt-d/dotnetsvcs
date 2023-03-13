@@ -1,9 +1,9 @@
 ﻿using Dotnetsvcs.DbCtx.Abstractions;
 using MyApp.Models;
-using MyApp.Svcs.Abstractions.BlogSvcs;
+using MyApp.Svcs.Abstractions.BlogSvcs.Common.Filters;
 using System.Linq.Expressions;
 
-namespace MyApp.Svcs.BlogSvcs;
+namespace MyApp.Svcs.BlogSvcs.Common.Filters;
 
 public class BlogDefaultFilter : IBlogDefaultFilter
 {

@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dotnetsvcs.Svc;
 
-public class ProjectorFactory<T> : IProjectorFactory<T> where T : IsProjection {
-    public ProjectorFactory(IServiceProvider serviceProvider) {
+public class ProjectionFactory<T> : IProjectionFactory<T> where T : IsProjection {
+    public ProjectionFactory(IServiceProvider serviceProvider) {
         ServiceProvider=serviceProvider;
     }
 

@@ -11,7 +11,7 @@ using Dotnetsvcs.Svc.Abstractions;
 
 namespace MyApp.Facade.BlazorServer;
 public class BlogFacade : IBlogFacade {
-    public BlogFacade(IDbCtxWrapperFactory dbCtxWrapperFactory, ISvcFactory<ICreateBlogService> createBlogServiceFactory, IRetrieveBlogService retrieveBlogService, IProjectorFactory<IBlogDefaultProjection> blogProjectionFactory) {
+    public BlogFacade(IDbCtxWrapperFactory dbCtxWrapperFactory, ISvcFactory<ICreateBlogService> createBlogServiceFactory, IRetrieveBlogService retrieveBlogService, IProjectionFactory<IBlogDefaultProjection> blogProjectionFactory) {
         DbCtxWrapperFactory=dbCtxWrapperFactory;
         CreateBlogServiceFactory=createBlogServiceFactory;
         RetrieveBlogService=retrieveBlogService;
@@ -21,7 +21,7 @@ public class BlogFacade : IBlogFacade {
     protected virtual IDbCtxWrapperFactory DbCtxWrapperFactory { get; }
     protected virtual ISvcFactory<ICreateBlogService> CreateBlogServiceFactory { get; }
     protected virtual IRetrieveBlogService RetrieveBlogService { get; }
-    protected virtual IProjectorFactory<IBlogDefaultProjection> BlogProjectionFactory { get; }
+    protected virtual IProjectionFactory<IBlogDefaultProjection> BlogProjectionFactory { get; }
 
     public async Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms) {
         using var ctx = DbCtxWrapperFactory.CreateCtx();

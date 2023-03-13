@@ -2,7 +2,6 @@
 using Dotnetsvcs.DtoParm.Abstractions;
 using Dotnetsvcs.Svc.Abstractions;
 using Dotnetsvcs.Svc.Abstractions.BaseOps;
-using Dotnetsvcs.Svc.Abstractions.Filter;
 
 namespace Dotnetsvcs.Svc.BaseOps;
 

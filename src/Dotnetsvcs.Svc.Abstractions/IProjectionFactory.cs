@@ -2,6 +2,6 @@
 
 namespace Dotnetsvcs.Svc.Abstractions;
 
-public interface IProjectorFactory<T> where T : IsProjection {
+public interface IProjectionFactory<T> where T : IsProjection {
     T Create();
 }

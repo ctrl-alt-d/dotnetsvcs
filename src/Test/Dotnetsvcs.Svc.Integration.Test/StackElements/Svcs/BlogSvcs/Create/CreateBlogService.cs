@@ -14,13 +14,13 @@ namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.BlogSvcs.Create;
 
 public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogService {
     protected virtual ISvcFactory<ICreatePostService> CreatePostServiceFactory { get; }
-    protected virtual IProjectorFactory<IPostDefaultProjection> PostDefaultProjectionFactory { get; }
+    protected virtual IProjectionFactory<IPostDefaultProjection> PostDefaultProjectionFactory { get; }
     public CreateBlogService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreateBlogPreConditions preConditions,
         ICreateBlogPostConditions postConditions,
         ISvcFactory<ICreatePostService> createPostServiceFactory,
-        IProjectorFactory<IPostDefaultProjection> postDefaultProjectionFactory,
+        IProjectionFactory<IPostDefaultProjection> postDefaultProjectionFactory,
         IBlogDefaultFilter filter
         )
         : base(dbCtxWrapperFactory, preConditions, postConditions, filter) {

@@ -5,7 +5,7 @@ using MyApp.DtoParm.BlogParm.Create;
 using MyApp.DtoParm.PostParm.Create;
 using MyApp.Models;
 using MyApp.Projections.Abstractions.PostProjections;
-using MyApp.Svcs.Abstractions.BlogSvcs;
+using MyApp.Svcs.Abstractions.BlogSvcs.Common.Filters;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create.PostConditions;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create.PreConditions;
@@ -16,13 +16,13 @@ namespace MyApp.Svcs.BlogSvcs.Create;
 public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogService
 {
     protected virtual ISvcFactory<ICreatePostService> PostCreateSvcFactory { get; }
-    protected virtual IProjectorFactory<IPostDefaultProjection> PostProjectorFactory { get; }
+    protected virtual IProjectionFactory<IPostDefaultProjection> PostProjectorFactory { get; }
     public CreateBlogService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreateBlogPreConditions preConditions,
         ICreateBlogPostConditions postConditions,
         ISvcFactory<ICreatePostService> svcFactory,
-        IProjectorFactory<IPostDefaultProjection> projectorLocator,
+        IProjectionFactory<IPostDefaultProjection> projectorLocator,
         IBlogDefaultFilter filter
         )
         : base(dbCtxWrapperFactory, preConditions, postConditions, filter)
