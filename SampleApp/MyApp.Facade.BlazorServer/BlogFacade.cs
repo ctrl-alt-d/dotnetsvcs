@@ -28,7 +28,7 @@ public class BlogFacade : IBlogFacade {
     protected virtual ISvcFactory<IRetrieveBlogService> RetrieveBlogServiceFactory { get; }
     protected virtual IProjectionFactory<IBlogDefaultProjection> BlogProjectionFactory { get; }
 
-    public async Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms) {
+    public virtual async Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms) {
         using var ctx = DbCtxWrapperFactory.CreateCtx();
         using var tx = ctx.BeginTransaction();
         using var svc = CreateBlogServiceFactory.Create();
@@ -37,7 +37,7 @@ public class BlogFacade : IBlogFacade {
         return await operation.TryCatch(tx);
     }
 
-    public async Task<DtoResult<BlogDtoData>> Create(CreateBlogParms parms) {
+    public virtual async Task<DtoResult<BlogDtoData>> Create(CreateBlogParms parms) {
         using var svc = CreateBlogServiceFactory.Create();
         using var projection = BlogProjectionFactory.Create();
         var operation = () => svc.Do(parms, projection);
@@ -47,7 +47,7 @@ public class BlogFacade : IBlogFacade {
     public void Dispose() {
     }
 
-    public async Task<DtoResult<DtoDataRetrieve<BlogDtoData>>> Retrieve(RetrieveBlogParms parms) {
+    public virtual async Task<DtoResult<DtoDataRetrieve<BlogDtoData>>> Retrieve(RetrieveBlogParms parms) {
         using var svc = RetrieveBlogServiceFactory.Create();
         using var projection = BlogProjectionFactory.Create();
         var operation = () => svc.Do(parms, projection);
