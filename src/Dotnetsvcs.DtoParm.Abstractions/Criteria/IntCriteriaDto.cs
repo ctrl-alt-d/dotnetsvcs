@@ -5,10 +5,10 @@ public class IntCriteriaDto
     public enum OperationType
     {
         Equals,
-        GreatherThan,
-        GreatherEqualThan,
+        GreaterThan,
+        GreaterThanOrEqual,
         LessThan,
-        LessEqualThan,
+        LessThanOrEqual,
         InRange,
         Empty,
 

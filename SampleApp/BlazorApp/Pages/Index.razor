@@ -9,6 +9,13 @@
 
 <h1>Blogs</h1>
 
+<button class="btn btn-primary" @onclick=CreateBlog>New Blog</button>
+<button class="btn btn-primary" @onclick=CreateBlogWithTx>New Blog with TX</button>
+
+<div class="mt-2 mb-2">
+    @errors
+</div>
+
 @if (QS == null)
 {
     <span>Loading data ...</span>
@@ -45,10 +52,6 @@ else
     </table>
 }
 
-<button class="btn btn-primary" @onclick=CreateBlog>New Blog</button> 
-<button class="btn btn-primary" @onclick=CreateBlogWithTx>New Blog with TX</button>
-
-@errors
 
 
 @code {
@@ -74,7 +77,7 @@ else
 
         var ratingCriteria = new IntCriteriaDto()
             {
-                Operation = IntCriteriaDto.OperationType.GreatherThan,
+                Operation = IntCriteriaDto.OperationType.GreaterThan,
                 Value1 = -1
             };
 

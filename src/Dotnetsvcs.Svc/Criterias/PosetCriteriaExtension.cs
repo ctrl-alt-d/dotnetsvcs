@@ -9,7 +9,7 @@ namespace Dotnetsvcs.Svc.Criterias;
 /// </summary>
 public static class PosetCriteriaExtension
 {
-    public static Expression<Func<T, bool>> WhereExpression<T, TProp>( this IntCriteriaDto criteria, Expression<Func<T, TProp>> propertyExpression)
+    public static Expression<Func<T, bool>> WhereExpression<T, TProp>( this IntCriteriaDto criteria, Expression<Func<T, TProp?>> propertyExpression)
      where TProp: IEquatable<TProp>, IComparable<TProp>
     {
         var op = criteria.Operation;
@@ -20,12 +20,12 @@ public static class PosetCriteriaExtension
         Expression<Func<T, bool>> e = op switch
         {
             // 
-            IntCriteriaDto.OperationType.GreatherThan =>
+            IntCriteriaDto.OperationType.GreaterThan =>
                 DynamicExpressionParser
                 .ParseLambda<T, bool>(new ParsingConfig(), true, $"{field} > @0", criteria.Value1),
 
             // 
-            IntCriteriaDto.OperationType.GreatherEqualThan =>
+            IntCriteriaDto.OperationType.GreaterThanOrEqual =>
                 DynamicExpressionParser
                 .ParseLambda<T, bool>(new ParsingConfig(), true, $"{field} >= @0", criteria.Value1),
 
@@ -35,7 +35,7 @@ public static class PosetCriteriaExtension
                 .ParseLambda<T, bool>(new ParsingConfig(), true, $"{field} < @0", criteria.Value1),
 
             // 
-            IntCriteriaDto.OperationType.LessEqualThan =>
+            IntCriteriaDto.OperationType.LessThanOrEqual =>
                 DynamicExpressionParser
                 .ParseLambda<T, bool>(new ParsingConfig(), true, $"{field} <= @0", criteria.Value1),
 
