@@ -1,20 +1,26 @@
-﻿using Dotnetsvcs.DbCtx.Abstractions;
-using Dotnetsvcs.Svc;
+﻿using Dotnetsvcs.Svc;
 using MyApp.Models;
-using System.Linq.Expressions;
 using MyApp.Svcs.Abstractions.BlogSvcs.Retrieve;
+using System.Linq.Expressions;
+using Dotnetsvcs.DbCtx.Abstractions;
+using MyApp.Svcs.Abstractions.BlogSvcs.Common.Filters;
+using MyApp.DtoParm.BlogParm.Retrieve;
+using Dotnetsvcs.Svc.Criterias;
 
 namespace MyApp.Svcs.BlogSvcs.Retrieve;
-internal class RetrieveBlogService : DbOpRetrieve<Blog>, IRetrieveBlogService
-{
-    public RetrieveBlogService(IDbCtxWrapperFactory dbCtxWrapperFactory) : base(dbCtxWrapperFactory)
-    {
+public class RetrieveBlogService : DbOpRetrieve<Blog, RetrieveBlogParms>, IRetrieveBlogService {
+    public RetrieveBlogService(
+        IDbCtxWrapperFactory dbCtxWrapperFactory, 
+        IBlogDefaultFilter filter) : base(dbCtxWrapperFactory, filter) {
     }
 
-    protected override async Task<Expression<Func<Blog, bool>>> GetFilterExpression()
+    protected override async Task<Expression<Func<Blog, bool>>> GetWhereFromParms(RetrieveBlogParms parms)
     {
-
         await Task.CompletedTask;
-        return (_) => true;
+
+        var titolWhere = parms.TitolCriteria.WhereExpression((Blog b) => b.Title);
+        var ratingWhere = parms.RatingCriteria.WhereExpression((Blog b) => b.Rating);
+
+        return AndCriterias.And(titolWhere, ratingWhere);
     }
 }

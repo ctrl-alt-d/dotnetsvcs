@@ -2,6 +2,7 @@
 using Dotnetsvcs.Svc;
 using MyApp.DtoParm.PostParm.Create;
 using MyApp.Models;
+using MyApp.Svcs.Abstractions.PostSvcs.Common.Filters;
 using MyApp.Svcs.Abstractions.PostSvcs.Create;
 using MyApp.Svcs.Abstractions.PostSvcs.Create.PostConditions;
 using MyApp.Svcs.Abstractions.PostSvcs.Create.PreConditions;
@@ -13,9 +14,10 @@ public class CreatePostService : DbOpCreate<Post, CreatePostParms>, ICreatePostS
     public CreatePostService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreatePostPreConditions preConditions,
-        ICreatePostPostConditions postConditions
+        ICreatePostPostConditions postConditions,
+        IPostDefaultFilter filter
         )
-        : base(dbCtxWrapperFactory, preConditions, postConditions)
+        : base(dbCtxWrapperFactory, preConditions, postConditions, filter)
     {
     }
 

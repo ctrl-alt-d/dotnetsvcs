@@ -6,13 +6,14 @@ using Dotnetsvcs.Svc.CtxWrapperHelpers;
 namespace Dotnetsvcs.Svc;
 
 public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelete<T, TParms> where T : class
-    where TParms : DtoParmUpdate {
+    where TParms : DtoParmDelete {
     protected DbOpDelete(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
-        IPostCondition<T, TParms> postCondition
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
         ) :
-        base(dbCtxWrapperFactory, preCondition, postCondition) {
+        base(dbCtxWrapperFactory, preCondition, postCondition, filter) {
     }
 
     public override async Task<TDtoData> Do<TDtoData>(
@@ -26,14 +27,15 @@ public abstract class DbOpDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpDelet
 
         await PreActions(parms, cancellationToken);
 
-        var entity = await DbCtxWrapper.FindOrException<T>(parms.keyValues);
+        var entity = await DbCtxWrapper.FindOrException<T>(parms.KeyValues);
 
         var result =
             await
             DbCtxWrapper
             .FirstWithProjectionAsync(
                 where: x => x == entity,
-                projection: projection.GetToDtoData(DbCtxWrapper)
+                filter: await Filter.GetFilter(DbCtxWrapper),
+                projection: await projection.GetToDtoData(DbCtxWrapper)
             );
 
         DbCtxWrapper.Remove(entity);

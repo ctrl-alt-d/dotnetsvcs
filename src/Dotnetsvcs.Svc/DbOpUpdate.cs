@@ -10,9 +10,10 @@ public abstract class DbOpUpdate<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpUpdat
     protected DbOpUpdate(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
-        IPostCondition<T, TParms> postCondition
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
         ) :
-        base(dbCtxWrapperFactory, preCondition, postCondition) {
+        base(dbCtxWrapperFactory, preCondition, postCondition, filter) {
     }
 
     protected abstract Task<T> UpdateEntityFromParms(TParms parms, T entity, CancellationToken cancellationToken = default);
@@ -28,7 +29,7 @@ public abstract class DbOpUpdate<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpUpdat
 
         await PreActions(parms, cancellationToken);
 
-        var entity = await DbCtxWrapper.FindOrException<T>(parms.keyValues);
+        var entity = await DbCtxWrapper.FindOrException<T>(parms.KeyValues);
 
         await UpdateEntityFromParms(parms, entity, cancellationToken);
 
@@ -43,7 +44,8 @@ public abstract class DbOpUpdate<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpUpdat
             DbCtxWrapper
             .FirstWithProjectionAsync(
                 where: x => x == entity,
-                projection: projection.GetToDtoData(DbCtxWrapper)
+                filter: await Filter.GetFilter(DbCtxWrapper),
+                projection: await projection.GetToDtoData(DbCtxWrapper)
             );
 
         return result;

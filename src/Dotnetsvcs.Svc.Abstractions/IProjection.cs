@@ -7,6 +7,6 @@ namespace Dotnetsvcs.Svc.Abstractions;
 public interface IProjection<T, TDtoData> : IsProjection, IDisposable
     where T : class
     where TDtoData : IDtoData {
-    Expression<Func<T, TDtoData>> GetToDtoData(IDbCtxWrapper dbCtxWrapper);
-
+    Task<Expression<Func<T, TDtoData>>> GetToDtoData(IDbCtxWrapper dbCtxWrapper);
+        
 }

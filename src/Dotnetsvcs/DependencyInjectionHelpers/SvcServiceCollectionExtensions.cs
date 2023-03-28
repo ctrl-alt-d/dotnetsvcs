@@ -14,6 +14,11 @@ internal static class SvcServiceCollectionExtensions {
         .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(IFacade));
 
 
+    internal static IServiceCollection AddFilters(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
+        =>
+        serviceCollection
+        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(IFilter<>));
+
     internal static IServiceCollection AddProjections(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
         =>
         serviceCollection
@@ -44,10 +49,15 @@ internal static class SvcServiceCollectionExtensions {
         serviceCollection
         .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(DbOpDelete<,>));
 
+    internal static IServiceCollection AddSoftDelete(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
+        =>
+        serviceCollection
+        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(DbOpSoftDelete<,>));
+
     internal static IServiceCollection AddRetrieve(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions)
         =>
         serviceCollection
-        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(DbOpRetrieve<>));
+        .AddWithInterfaceIfImplementsGenericInterface(assemblyImplementations, assemblyAbstractions, typeof(DbOpRetrieve<,>));
 
     private static IServiceCollection AddWithInterfaceIfImplementsGenericInterface(this IServiceCollection serviceCollection, Assembly assemblyImplementations, Assembly assemblyAbstractions, Type target) {
         var items =

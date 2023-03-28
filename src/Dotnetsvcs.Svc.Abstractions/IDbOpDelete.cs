@@ -5,5 +5,5 @@ namespace Dotnetsvcs.Svc.Abstractions;
 
 public interface IDbOpDelete<T, TParms> : IDbOpCUDBase<T, TParms>
     where T : class
-    where TParms : DtoParmUpdate {
+    where TParms : DtoParmDelete {
 }

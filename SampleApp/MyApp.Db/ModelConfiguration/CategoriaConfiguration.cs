@@ -4,9 +4,9 @@ using MyApp.Models;
 
 namespace MyApp.Db.ModelConfiguration;
 public class CategoriaConfiguration
-       : IEntityTypeConfiguration<Categoria>
+       : IEntityTypeConfiguration<Category>
 {
-    public void Configure(EntityTypeBuilder<Categoria> mConfiguration)
+    public void Configure(EntityTypeBuilder<Category> mConfiguration)
     {
         mConfiguration.HasKey(x => x.Id);
 
@@ -15,18 +15,18 @@ public class CategoriaConfiguration
             .ValueGeneratedNever();
 
         mConfiguration
-            .Property(o => o.Titol)
+            .Property(o => o.Name)
             .HasMaxLength(250)
             .IsRequired();
 
         mConfiguration
-            .Property(o => o.Titol)
+            .Property(o => o.Name)
             .HasMaxLength(250)
             .IsRequired();
 
         mConfiguration
-            .HasOne(x => x.Pare)
-            .WithMany(x => x!.CategoriesFilles)
+            .HasOne(x => x.Parent)
+            .WithMany(x => x!.SubCategories)
             .HasForeignKey("PareId")
             .OnDelete(DeleteBehavior.Restrict);
 

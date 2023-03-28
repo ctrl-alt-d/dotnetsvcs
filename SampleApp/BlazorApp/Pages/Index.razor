@@ -1,59 +1,158 @@
 ﻿@page "/"
+@using Dotnetsvcs.DtoParm.Abstractions.Criteria;
+@using MyApp.DtoData.BlogDtosData;
+@using MyApp.DtoParm.BlogParm.Retrieve;
 
 @inherits OwningComponentBase<IBlogFacade>
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Blogs</h1>
 
-@if (QS == null) {
+@if (QS == null)
+{
     <span>Loading data ...</span>
 }
-else {
-    <input type="text" @bind=filter @bind:event="oninput" />
-    <ul>
-        @foreach (
-            var item
-            in QS.Where(b => b.Titol.Contains(filter)).Select(b => new { b.Titol, aggCountPost = b.Posts.Count() })
-        ) {
-            <li>@item.Titol Num Posts: @item.aggCountPost</li>
-        }
-    </ul>
+else
+{
+    <input 
+        class="form-control"
+        placeholder="Filter" 
+        type="text" 
+        @bind=filter 
+        @bind:event="oninput" @onkeyup=RetrieveData />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    #
+                </th>
+                <th scope="col">Title</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in QS)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Titol Num Posts: @item.NumPostsCalculated</td>
+                    <td><button class="btn btn-danger" @onclick="() => DeleteBlog(item.Id)">Delete</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
-<button @onclick=CreaBlog>Crear blog</button>
+<button class="btn btn-primary" @onclick=CreateBlog>New Blog</button> 
+<button class="btn btn-primary" @onclick=CreateBlogWithTx>New Blog with TX</button>
 
-<button @onclick=CreaBlogAmbTx>Crear blog amb tx</button>
-
-<a href="/page2">Go page 2</a>
+@errors
 
 
 @code {
     protected string filter = "";
 
-    IQueryable<Blog>? QS;
+    protected string errors = "";
 
-    protected override async Task OnInitializedAsync() {
-        QS = await Service.Retrieve();
+    List<BlogDtoData>? QS;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RetrieveData();
     }
 
-    protected async Task CreaBlog() {
+    protected async Task RetrieveData()
+    {
+        var titolCriteria =
+        new StringCriteriaDto()
+            {
+                Pattern = filter,
+                Operation = StringCriteriaDto.OperationType.Contains
+            };
+
+        var ratingCriteria = new IntCriteriaDto()
+            {
+                Operation = IntCriteriaDto.OperationType.GreatherThan,
+                Value1 = -1
+            };
+
+        var pams = new RetrieveBlogParms()
+            {
+                TitolCriteria = titolCriteria,
+                RatingCriteria = ratingCriteria,
+                ItemsPerPage = int.MaxValue,
+                Page = 0,
+            };
+
+        var response = await Service.Retrieve(pams);
+        QS = response.Data!.Items.ToList();
+    }
+
+    protected async Task CreateBlog()
+    {
+        errors = "";
+        var parm = new MyApp.DtoParm.BlogParm.Create.CreateBlogParms()
+            {
+                Titol = Guid.NewGuid().ToString(),
+                WithNposts = 10
+            };
+        var result = await Service.Create(parm);
+
+        if (result.Errors.Any())
+        {
+            errors = string.Join(". ", result.Errors.Select(x => x.Message));
+            return;
+        }
+
+        QS!.Add(result.Data!);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task CreateBlogWithTx()
+    {
+        errors = "";
 
         var parm = new MyApp.DtoParm.BlogParm.Create.CreateBlogParms()
-        {
-            Titol = Guid.NewGuid().ToString(),
-            WithNposts = 10
-        };
-        var result = await Service.Create(parm);
-    }
-
-    protected async Task CreaBlogAmbTx() {
-
-        var parm = new MyApp.DtoParm.BlogParm.Create.CreateBlogParms() {
+            {
                 Titol = Guid.NewGuid().ToString(),
                 WithNposts = 10
             };
         var result = await Service.CreateWithTx(parm);
+
+        if (result.Errors.Any())
+        {
+            errors = string.Join(". ", result.Errors.Select(x => x.Message));
+            return;
+        }
+
+        QS!.Add(result.Data!);
+
+        await InvokeAsync(StateHasChanged);
     }
 
+    protected async Task DeleteBlog(int id)
+    {
+        errors = "";
+        var parm = new MyApp.DtoParm.BlogParm.Delete.DeleteBlogParms()
+            {
+                KeyValues = new object[] { id }
+            };
+
+        var result = await Service.Delete(parm);
+
+        if (result.Errors.Any())
+        {
+            errors = string.Join(". ", result.Errors.Select(x => x.Message));
+            return;
+        }
+
+        var item = QS!.First(i => i.Id == id);
+
+        QS!.Remove(item);
+
+        await InvokeAsync(StateHasChanged);
+    }
 }

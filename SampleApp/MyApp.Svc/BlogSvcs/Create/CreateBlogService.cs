@@ -5,6 +5,7 @@ using MyApp.DtoParm.BlogParm.Create;
 using MyApp.DtoParm.PostParm.Create;
 using MyApp.Models;
 using MyApp.Projections.Abstractions.PostProjections;
+using MyApp.Svcs.Abstractions.BlogSvcs.Common.Filters;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create.PostConditions;
 using MyApp.Svcs.Abstractions.BlogSvcs.Create.PreConditions;
@@ -14,29 +15,33 @@ namespace MyApp.Svcs.BlogSvcs.Create;
 
 public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogService
 {
-    protected virtual ISvcFactory<ICreatePostService> SvcFactory { get; }
-    protected virtual IProjectorFactory<IPostDefaultProjection> ProjectorFactory { get; }
+    // This service calls post service (*1):
+    protected virtual ISvcFactory<ICreatePostService> PostSvcFactory { get; }
+    protected virtual IProjectionFactory<IPostDefaultProjection> PostProjectionFactory { get; }
+
+    // Constructor
     public CreateBlogService(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         ICreateBlogPreConditions preConditions,
         ICreateBlogPostConditions postConditions,
         ISvcFactory<ICreatePostService> svcFactory,
-        IProjectorFactory<IPostDefaultProjection> projectorLocator
+        IProjectionFactory<IPostDefaultProjection> postProjectionFactory,
+        IBlogDefaultFilter filter
         )
-        : base(dbCtxWrapperFactory, preConditions, postConditions)
+        : base(dbCtxWrapperFactory, preConditions, postConditions, filter)
     {
-        SvcFactory = svcFactory;
-        ProjectorFactory = projectorLocator;
+        PostSvcFactory = svcFactory;
+        PostProjectionFactory = postProjectionFactory;
     }
 
     protected override async Task<Blog> CreateEntityFromParms(CreateBlogParms parms, CancellationToken cancellationToken = default)
     {
         var blog = new Blog()
         {
-            Categoria = null,
-            EsVisible = true,
+            Category = null,
+            IsDeleted = false,
             Rating = parms.Rating,
-            Titol = parms.Titol
+            Title = parms.Titol
         };
 
         await Task.CompletedTask;
@@ -46,8 +51,8 @@ public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogS
 
     protected override async Task PostActions(CreateBlogParms parms, Blog entity, CancellationToken cancellationToken = default)
     {
-        var createPostService = SvcFactory.Create();
-        var postProjection = ProjectorFactory.Create();
+        using var createPostService = PostSvcFactory.Create();
+        using var postProjection = PostProjectionFactory.Create();
 
         foreach (var i in Enumerable.Range(0, parms.WithNposts))
         {
@@ -58,7 +63,7 @@ public class CreateBlogService : DbOpCreate<Blog, CreateBlogParms>, ICreateBlogS
                 Descripcio = $"Post test {i}"
             };
 
-            await createPostService.Do(
+            await createPostService.Do(  // (*1)
                 createPostParms,
                 postProjection,
                 DbCtxWrapper,
