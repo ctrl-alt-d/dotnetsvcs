@@ -9,14 +9,17 @@ public abstract class DbOpCUDBase<T, TParms> : DbOpBase, IDbOpCUDBase<T, TParms>
     where T : class {
     protected virtual IPreCondition<TParms> PreCondition { get; }
     protected virtual IPostCondition<T, TParms> PostCondition { get; }
+    protected virtual IFilter<T> Filter { get; }
 
     protected DbOpCUDBase(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
-        IPostCondition<T, TParms> postCondition
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
         ) : base(dbCtxWrapperFactory) {
         PreCondition = preCondition;
         PostCondition = postCondition;
+        Filter = filter;
     }
 
     protected async Task CheckPreconditions(TParms parms, CancellationToken cancellationToken = default) {

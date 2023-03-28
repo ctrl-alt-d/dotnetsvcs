@@ -59,11 +59,10 @@ public class ServiceSqlTest {
             "VALUES (@p0, @p1, @p2, @p3, @p4) RETURNING Id, TimeStamp;";
 
         var expectedProjection =
-            "SELECT b.Titol, b.Preu, b.TimeStamp, c.Id IS NULL, c.Id," +
-            " CASE WHEN c.Id IS NULL THEN '' ELSE c.Titol END, b.Rating, " +
-            "( SELECT COUNT(*) FROM Post AS p WHERE b.Id = p.BlogId) " + // <-- Aggregation on the fly
-            "FROM Blog AS b LEFT JOIN Categoria AS c " +
-            "ON b.CategoriaId = c.Id " +
+            "SELECT b.Titol, b.Preu, b.TimeStamp, c.Id IS NULL, c.Id, " +
+            "CASE WHEN c.Id IS NULL THEN '' ELSE c.Titol END, b.Rating, " +
+            "( SELECT COUNT(*) FROM Post AS p WHERE b.Id = p.BlogId AND NOT (p.IsSoftDeleted)) " + // <-- aggregation with filter
+            "FROM Blog AS b LEFT JOIN Categoria AS c ON b.CategoriaId = c.Id " +
             "WHERE b.Id = @__entity_equality_entity_0_Id LIMIT 1";
 
         // Act

@@ -12,9 +12,10 @@ public abstract class DbOpCreate<T, TParms> :
     protected DbOpCreate(
         IDbCtxWrapperFactory dbCtxWrapperFactory,
         IPreCondition<TParms> preCondition,
-        IPostCondition<T, TParms> postCondition
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
         ) :
-        base(dbCtxWrapperFactory, preCondition, postCondition) {
+        base(dbCtxWrapperFactory, preCondition, postCondition, filter) {
     }
 
     protected abstract Task<T> CreateEntityFromParms(TParms parms, CancellationToken cancellationToken = default);
@@ -44,7 +45,8 @@ public abstract class DbOpCreate<T, TParms> :
             DbCtxWrapper
             .FirstWithProjectionAsync(                
                 where: x => x == entity,
-                projection: projection.GetToDtoData(DbCtxWrapper)
+                filter: await Filter.GetFilter(DbCtxWrapper),
+                projection: await projection.GetToDtoData(DbCtxWrapper)
             );
 
         return result;

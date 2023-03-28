@@ -16,7 +16,7 @@ public class DuplicateTitle : IDuplicateTitle
         var alreadyexists =
             dbCtxWrapper
             .Set<Blog>()
-            .Where(x => x.Titol == parms.Titol)
+            .Where(x => x.Title == parms.Titol)
             .Any();  //<-- This can be AnyAsync if adding EF or adding to CtxWrapper (ToDo)
 
         await Task.CompletedTask;

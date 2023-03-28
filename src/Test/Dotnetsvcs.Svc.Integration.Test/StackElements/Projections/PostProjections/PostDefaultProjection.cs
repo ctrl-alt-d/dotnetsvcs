@@ -18,7 +18,7 @@ public class PostDefaultProjection : IPostDefaultProjection {
         RandomService1.Dispose();
     }
 
-    public Expression<Func<Post, PosTDtoData>> GetToDtoData(IDbCtxWrapper dbCtxWrapper) {
+    public async Task<Expression<Func<Post, PosTDtoData>>> GetToDtoData(IDbCtxWrapper dbCtxWrapper) {
 
         var totalNumberOfBlogs = dbCtxWrapper.Set<Blog>().Count();
         var NumerTwo = RandomService1.Sum2(0);

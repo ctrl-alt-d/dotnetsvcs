@@ -3,16 +3,16 @@ namespace MyApp.Models;
 public class Blog
 {
     public int Id { get; set; }
-    public virtual string Titol { get; set; } = default!;
+    public virtual string Title { get; set; } = default!;
 
     public virtual int Rating { get; set; } = default!;
 
-    public virtual bool EsVisible { get; set; } = default!;
+    public virtual bool IsDeleted { get; set; } = default!;
 
-    public virtual decimal? Preu { get; set; } = default!;
+    public virtual decimal? Price { get; set; } = default!;
 
     // Categoria
-    public virtual Categoria? Categoria { get; set; } = default!;
+    public virtual Category? Category { get; set; } = default!;
 
     // Posts
     public virtual IEnumerable<Post> Posts { get; set; } = default!;

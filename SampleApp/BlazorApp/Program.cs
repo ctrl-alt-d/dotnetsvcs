@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MyApp.Facade.BlazorServer.Abstractions;
 using MyApp.Facade.BlazorServer;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

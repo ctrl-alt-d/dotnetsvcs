@@ -1,0 +1,54 @@
+﻿using Dotnetsvcs.DtoParm.Abstractions;
+using Dotnetsvcs.Svc.Abstractions;
+using Dotnetsvcs.Svc.BaseOps;
+using Dotnetsvcs.Svc.CtxWrapperHelpers;
+
+namespace Dotnetsvcs.Svc;
+
+public abstract class DbOpSoftDelete<T, TParms> : DbOpCUDBase<T, TParms>, IDbOpSoftDelete<T, TParms> where T : class
+    where TParms : DtoParmDelete {
+    protected DbOpSoftDelete(
+        IDbCtxWrapperFactory dbCtxWrapperFactory,
+        IPreCondition<TParms> preCondition,
+        IPostCondition<T, TParms> postCondition,
+        IFilter<T> filter
+        ) :
+        base(dbCtxWrapperFactory, preCondition, postCondition, filter) {
+    }
+
+    protected abstract Task<T> SoftDeleteModel(TParms parms, T entity, CancellationToken cancellationToken = default);
+
+    public override async Task<TDtoData> Do<TDtoData>(
+        TParms parms,
+        IProjection<T, TDtoData> projection,
+        IDbCtxWrapper? ctx = null,
+        CancellationToken cancellationToken = default) {
+        if (ctx != null) this.UseDbCtxWrapper(ctx);
+
+        await CheckPreconditions(parms, cancellationToken);
+
+        await PreActions(parms, cancellationToken);
+
+        var entity = await DbCtxWrapper.FindOrException<T>(parms.KeyValues);
+
+        var result =
+            await
+            DbCtxWrapper
+            .FirstWithProjectionAsync(
+                where: x => x == entity,
+                filter: await Filter.GetFilter(DbCtxWrapper),
+                projection: await projection.GetToDtoData(DbCtxWrapper)
+            );
+
+        await SoftDeleteModel(parms, entity);
+
+        if (SaveChangesFlag) await DbCtxWrapper.SaveChangesAsync(cancellationToken);
+
+        await PostActions(parms, entity, cancellationToken);
+
+        await CheckPostConditions(entity, parms, cancellationToken);
+
+        return result;
+    }
+
+}

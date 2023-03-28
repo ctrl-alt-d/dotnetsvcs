@@ -8,6 +8,6 @@ public static class ServiceCollectionExtensions {
         =>
         serviceCollection
         .AddScoped(typeof(ISvcFactory<>), typeof(SvcFactory<>))
-        .AddScoped(typeof(IProjectorFactory<>), typeof(ProjectorFactory<>))
+        .AddScoped(typeof(IProjectionFactory<>), typeof(ProjectionFactory<>))
         ;
 }

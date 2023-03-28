@@ -28,12 +28,12 @@ public class BlogConfiguration
             .HasKey(x => x.Id);
 
         mConfiguration
-            .Property(o => o.Titol)
+            .Property(o => o.Title)
             .HasMaxLength(250)
             .IsRequired();
 
         mConfiguration
-            .Property(b => b.EsVisible)
+            .Property(b => b.IsDeleted)
             .IsRequired();
 
         mConfiguration
@@ -41,11 +41,11 @@ public class BlogConfiguration
             .IsRequired();
 
         mConfiguration
-            .Property(b => b.Preu)
+            .Property(b => b.Price)
             .HasColumnType("REAL"); // money a sqlserver
 
         mConfiguration
-            .HasOne(x => x.Categoria)
+            .HasOne(x => x.Category)
             .WithMany(x => x.Blogs)
             .HasForeignKey("CategoriaId")
             .OnDelete(DeleteBehavior.SetNull);

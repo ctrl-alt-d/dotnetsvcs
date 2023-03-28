@@ -12,11 +12,11 @@ public abstract class DbOpBase : IDisposable, IDbOpBase {
         DbCtxWrapperFactory = dbCtxWrapperFactory;
     }
 
-    protected void UseDbCtxWrapper(IDbCtxWrapper dbCtxWrapper) {
+    protected virtual void UseDbCtxWrapper(IDbCtxWrapper dbCtxWrapper) {
         _externalDbCtxWrapper = dbCtxWrapper;
     }
 
-    protected IDbCtxWrapper DbCtxWrapper {
+    protected virtual IDbCtxWrapper DbCtxWrapper {
         get {
             if (_externalDbCtxWrapper != null)
                 return _externalDbCtxWrapper;
