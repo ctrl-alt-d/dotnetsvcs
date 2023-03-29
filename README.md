@@ -14,13 +14,17 @@ SOLID stack to create CRUD services:
 * Criterias: Helpers to generate Where clause from Criteria DTOs
 
 ```
-Blazor --------------> Facade ------------------------> Service -------------> models
-         Parm DTO                Parm Dto                
-                                 DbContextWrapper
-                                 Projection
+                                                                                         DbContextWrapper
+                                                                                                |
+Blazor --------------> Facade ------------------------> Service ------┬------> Filter  -------->|
+         Parm DTO                Parm Dto                             |------> PreContidions -->|
+                                 DbContextWrapper                     └------> PostConditions ->|    
+                                 Projection                                                     |     Models
+                                                                                                |
+Blazor <-------------- Facade <------------------------ Service <-------------------------------|
+         DTO Result                Dto Data                                                     |
+        (+Dto Data)               (using Projection)                                            |
 
-Blazor <-------------- Facade <------------------------ Service <------------- models
-         DTO Result                Dto Data                
 ```
 
 #### To full understand:
