@@ -14,6 +14,7 @@ public class PostDefaultProjection : IPostDefaultProjection
     public async Task<Expression<Func<Post, PostDtoData>>> GetToDtoData(IDbCtxWrapper dbCtxWrapper)
     {
 
+        await Task.CompletedTask;
         var totalNumberOfBlogs = dbCtxWrapper.Set<Blog>().Count();
         var NumerTwo = 2;
 

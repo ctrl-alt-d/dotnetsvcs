@@ -18,7 +18,7 @@ public class BlogConfiguration
         mConfiguration
             .Property(p => p.TimeStamp)
             .IsRowVersion()
-            .HasConversion(new SqliteTimestampConverter())
+            .HasConversion(converter: new SqliteTimestampConverter())
             .HasColumnType("INTEGER")
             .HasDefaultValueSql("1");
 

@@ -16,10 +16,12 @@ public class PostDefaultProjection : IPostDefaultProjection {
 
     public void Dispose() {
         RandomService1.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     public async Task<Expression<Func<Post, PosTDtoData>>> GetToDtoData(IDbCtxWrapper dbCtxWrapper) {
 
+        await Task.CompletedTask;
         var totalNumberOfBlogs = dbCtxWrapper.Set<Blog>().Count();
         var NumerTwo = RandomService1.Sum2(0);
 
