@@ -1,9 +1,5 @@
-﻿using Dotnetsvcs.DbCtx.Abstractions;
-using MyApp.DtoData.BlogDtosData;
-using MyApp.Models;
+﻿using MyApp.DtoData.BlogDtosData;
 using MyApp.Projections.Abstractions.BlogProjections;
-using MyApp.Svcs.Abstractions.PostSvcs.Common.Filters;
-using System.Linq.Expressions;
 
 namespace MyApp.Projections.BlogProjections;
 
@@ -16,6 +12,8 @@ public class BlogDefaultProjection : IBlogDefaultProjection
     protected virtual IPostDefaultFilter PostFilter { get; }
 
     public void Dispose() {
+        PostFilter.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     public async Task<Expression<Func<Blog, BlogDtoData>>> GetToDtoData(IDbCtxWrapper ctx)
@@ -33,6 +31,4 @@ public class BlogDefaultProjection : IBlogDefaultProjection
             NumPostsCalculated = blog.Posts.AsQueryable().Where(filter).Count(),
         };
     }
-
-
 }

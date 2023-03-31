@@ -3,7 +3,9 @@
 @using MyApp.DtoData.BlogDtosData;
 @using MyApp.DtoParm.BlogParm.Retrieve;
 
-@inherits OwningComponentBase<IBlogFacade>
+@inject IBlogFacade Service
+@implements IDisposable
+
 
 <PageTitle>Index</PageTitle>
 
@@ -157,5 +159,11 @@ else
         QS!.Remove(item);
 
         await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Service?.Dispose();
+        Service = null;
     }
 }

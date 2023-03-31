@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Dotnetsvcs.Facade.Abstractions\Dotnetsvcs.Facade.Abstractions.csproj" />
     <ProjectReference Include="..\MyApp.DtoData\MyApp.DtoData.csproj" />
     <ProjectReference Include="..\MyApp.DtoParm\MyApp.DtoParm.csproj" />

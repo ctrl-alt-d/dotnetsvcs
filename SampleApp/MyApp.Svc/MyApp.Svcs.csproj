@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Dotnetsvcs.Svc\Dotnetsvcs.Svc.csproj" />
     <ProjectReference Include="..\MyApp.DtoParm\MyApp.DtoParm.csproj" />
     <ProjectReference Include="..\MyApp.Models\MyApp.Models.csproj" />
