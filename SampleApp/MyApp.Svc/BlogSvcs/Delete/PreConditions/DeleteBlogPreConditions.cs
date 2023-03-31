@@ -37,6 +37,8 @@ public class DeleteBlogPreConditions : IDeleteBlogPreConditions
     }
 
     public void Dispose()
-    {        
+    {
+        Filter.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

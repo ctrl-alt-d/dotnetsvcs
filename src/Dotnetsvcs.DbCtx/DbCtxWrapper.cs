@@ -135,4 +135,9 @@ public class DbCtxWrapper<TDbContext> : IDbCtxWrapper
         .Select(projection)
         .FirstOrDefaultAsync();
 
+    public void Attach<T>(T entity)
+    {
+        DbContext
+            .Attach(entity!);
+    }
 }

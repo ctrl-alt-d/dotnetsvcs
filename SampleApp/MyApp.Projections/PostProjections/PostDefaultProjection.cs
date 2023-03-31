@@ -1,14 +1,12 @@
-﻿using Dotnetsvcs.DbCtx.Abstractions;
-using MyApp.DtoData.PostDtosData;
-using MyApp.Models;
+﻿using MyApp.DtoData.PostDtosData;
 using MyApp.Projections.Abstractions.PostProjections;
-using System.Linq.Expressions;
 
 namespace MyApp.Projections.PostProjections;
 
 public class PostDefaultProjection : IPostDefaultProjection
 {
-    public void Dispose() {        
+    public void Dispose() {     
+        GC.SuppressFinalize(this);
     }
 
     public async Task<Expression<Func<Post, PostDtoData>>> GetToDtoData(IDbCtxWrapper dbCtxWrapper)

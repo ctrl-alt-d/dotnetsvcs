@@ -6,6 +6,11 @@ using System.Linq.Expressions;
 namespace Dotnetsvcs.Svc.Integration.Test.StackElements.Svcs.Filters.PostFilters;
 
 public class PostDefaultFilter : IPostDefaultFilter {
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
+
     public async Task<Expression<Func<Post, bool>>> GetFilter(IDbCtxWrapper ctx) {
         await Task.CompletedTask;
         return post => !post.IsSoftDeleted;

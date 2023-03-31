@@ -45,6 +45,7 @@ public abstract class DbOpCUDBase<T, TParms> : DbOpBase, IDbOpCUDBase<T, TParms>
 
     public override void Dispose() {
         base.Dispose();
+        Filter.Dispose();
         PreCondition.Dispose();
         PostCondition.Dispose();
     }

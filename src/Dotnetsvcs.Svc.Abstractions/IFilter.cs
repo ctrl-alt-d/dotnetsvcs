@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 
 namespace Dotnetsvcs.Svc.Abstractions;
-public interface IFilter<T>
+public interface IFilter<T>: IDisposable
 {
     public Task<Expression<Func<T, bool>>> GetFilter(IDbCtxWrapper ctx);
 }

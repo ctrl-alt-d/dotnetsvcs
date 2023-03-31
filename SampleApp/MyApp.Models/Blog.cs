@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace MyApp.Models;
 
 public class Blog
@@ -18,6 +20,8 @@ public class Blog
     public virtual IEnumerable<Post> Posts { get; set; } = default!;
 
     public byte[] TimeStamp { get; set; } = default!;
+
+    public IdentityUser Owner { get; set; } = default!;
 
 }
 

@@ -3,7 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-SampleApp/BlazorApp/Application.db*
+SampleApp/Tmp/*
+!SampleApp/Tmp/@TmpFiles
 
 # User-specific files
 *.rsuser

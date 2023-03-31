@@ -11,6 +11,7 @@ using Dotnetsvcs.DtoData.Abstractions;
 using MyApp.DtoParm.BlogParm.Retrieve;
 using MyApp.DtoParm.BlogParm.Delete;
 using MyApp.Svcs.Abstractions.BlogSvcs.Delete;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace MyApp.Facade.BlazorServer;
 public class BlogFacade : IBlogFacade {
@@ -19,7 +20,8 @@ public class BlogFacade : IBlogFacade {
         ISvcFactory<ICreateBlogService> createBlogServiceFactory,
         ISvcFactory<IRetrieveBlogService> retrieveBlogServiceFactory,
         IProjectionFactory<IBlogDefaultProjection> blogProjectionFactory,
-        ISvcFactory<IDeleteBlogService> deleteBlogServiceFactory)
+        ISvcFactory<IDeleteBlogService> deleteBlogServiceFactory
+        )
     {
         DbCtxWrapperFactory=dbCtxWrapperFactory;
         CreateBlogServiceFactory=createBlogServiceFactory;
@@ -34,6 +36,7 @@ public class BlogFacade : IBlogFacade {
     protected virtual ISvcFactory<IRetrieveBlogService> RetrieveBlogServiceFactory { get; }
     protected virtual IProjectionFactory<IBlogDefaultProjection> BlogProjectionFactory { get; }
     protected virtual ISvcFactory<IDeleteBlogService> DeleteBlogServiceFactory { get; }
+    
 
     public virtual async Task<DtoResult<BlogDtoData>> CreateWithTx(CreateBlogParms parms) {
         using var ctx = DbCtxWrapperFactory.CreateCtx();

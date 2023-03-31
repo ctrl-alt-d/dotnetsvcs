@@ -8,6 +8,8 @@ namespace Dotnetsvcs.DbCtx.Abstractions;
 /// Try to code your logic without full DbContext, just with wrappers.
 /// </summary>
 public interface IDbCtxWrapper : IDisposable {
+
+    void Attach<T>(T entity);
     ITxWrapper BeginTransaction();
 
     Task AddAsync<T>(T entity, CancellationToken cancellationToken = default)

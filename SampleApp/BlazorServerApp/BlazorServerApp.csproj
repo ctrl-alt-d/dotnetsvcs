@@ -4,20 +4,22 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aspnet-BlazorServerApp-cf779547-3dd8-44a3-84e1-071cb0024284</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.4" />
 
 		<ProjectReference Include="..\..\src\Dotnetsvcs\Dotnetsvcs.csproj" />
-		
+
 		<ProjectReference Include="..\MyApp.Db\MyApp.Db.csproj" />
-		
 		<ProjectReference Include="..\MyApp.Facade.BlazorServer.Abstractions\MyApp.Facade.BlazorServer.Abstractions.csproj" />
-		
 		<ProjectReference Include="..\MyApp.Facade.BlazorServer\MyApp.Facade.BlazorServer.csproj" />
 		<ProjectReference Include="..\MyApp.Projections\MyApp.Projections.csproj" />
 		<ProjectReference Include="..\MyApp.Svc\MyApp.Svcs.csproj" />
+
 	</ItemGroup>
 
 </Project>

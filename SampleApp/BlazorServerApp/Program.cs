@@ -1,23 +1,23 @@
-using System.Reflection;
+using BlazorServerApp.Areas.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyApp.Db;
+using System.Reflection;
 using Dotnetsvcs.DependencyInjection;
 using MyApp.Svcs;
 using MyApp.Svcs.Abstractions;
 using MyApp.Projections;
 using MyApp.Projections.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using MyApp.Facade.BlazorServer.Abstractions;
 using MyApp.Facade.BlazorServer;
-
+using MyApp.Facade.BlazorServer.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
 
 builder.Services.AddDbContextFactory<TestDbContext>(
-    o => o.UseSqlite("Data Source=Application.db;Cache=Shared"));
+    o => o.UseSqlite("Data Source=../Tmp/Application.db;Cache=Shared"));
 
 builder.Services.AddDotnetsvc<TestDbContext>(
     assembySvcImplementations: Assembly.GetAssembly(typeof(SvcsImplementation))!,
@@ -28,26 +28,36 @@ builder.Services.AddDotnetsvc<TestDbContext>(
     assemblyFacadeAbstractions: Assembly.GetAssembly(typeof(FacadeAbstractions))!
 );
 
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<TestDbContext>();
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseMigrationsEndPoint();
+}
+else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthorization();
+
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-//
 app
     .Services
     .GetRequiredService<IDbContextFactory<TestDbContext>>()
@@ -55,7 +65,5 @@ app
     .Database
     .EnsureCreated();
 
-
-//
 
 app.Run();
