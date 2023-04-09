@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aspnet-BlazorServerApp-cf779547-3dd8-44a3-84e1-071cb0024284</UserSecretsId>
-		<IsPackable>true</IsPackable>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
