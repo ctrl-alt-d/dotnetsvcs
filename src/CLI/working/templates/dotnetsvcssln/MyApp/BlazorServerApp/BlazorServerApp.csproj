@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aspnet-BlazorServerApp-cf779547-3dd8-44a3-84e1-071cb0024284</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.4" />
+
+		<PackageReference Include="Dotnetsvcs" Version="1.0.69" />
+
+		<ProjectReference Include="..\MyApp.Db\MyApp.Db.csproj" />
+		<ProjectReference Include="..\MyApp.Facade.BlazorServer.Abstractions\MyApp.Facade.BlazorServer.Abstractions.csproj" />
+		<ProjectReference Include="..\MyApp.Facade.BlazorServer\MyApp.Facade.BlazorServer.csproj" />
+		<ProjectReference Include="..\MyApp.Projections\MyApp.Projections.csproj" />
+		<ProjectReference Include="..\MyApp.Svc\MyApp.Svcs.csproj" />
+
+	</ItemGroup>
+
+</Project>
